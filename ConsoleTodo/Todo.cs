@@ -15,5 +15,13 @@ namespace ConsoleTodo {
             tasks.Add(todoTask);
             return tasks;
         }
+
+        public List<TodoTask> GetList(int no = -1) {
+            if (no != -1) {
+                return new List<TodoTask>() { tasks[no] };
+            }
+
+            return tasks;
+        }
     }
 }

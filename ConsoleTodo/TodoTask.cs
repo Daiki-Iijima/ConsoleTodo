@@ -9,8 +9,8 @@ namespace ConsoleTodo {
 
         private string taskName;
 
-        public TodoTask(string str) {
-            taskName = str;
+        public TodoTask(string taskName) {
+            this.taskName = taskName;
         }
 
         public override bool Equals(object obj) {
