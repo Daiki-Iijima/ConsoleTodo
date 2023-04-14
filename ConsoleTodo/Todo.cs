@@ -5,20 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleTodo {
-    public class TodoTask {
+    public class Todo {
 
-        private string taskName;
+        private List<TodoTask> tasks = new List<TodoTask>();
 
-        public TodoTask(string str) {
-            taskName = str;
-        }
+        public Todo() { }
 
-        public override bool Equals(object obj) {
-            if (obj is TodoTask task) {
-                return taskName.Equals(task.taskName);
-            }
-
-            return false;
+        public List<TodoTask> add(TodoTask todoTask) {
+            tasks.Add(todoTask);
+            return tasks;
         }
     }
 }
