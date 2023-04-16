@@ -11,17 +11,40 @@ namespace ConsoleTodo {
 
         public Todo() { }
 
-        public List<TodoTask> add(TodoTask todoTask) {
+        public List<TodoTask> Add(TodoTask todoTask) {
             tasks.Add(todoTask);
             return tasks;
         }
 
-        public List<TodoTask> GetList(int no = -1) {
-            if (no != -1) {
-                return new List<TodoTask>() { tasks[no] };
+        public List<TodoTask> Delete(List<int> deleteList) {
+            tasks = tasks.Where((task, i) =>!deleteList.Contains(i)).ToList();
+            return tasks;
+        }
+
+        public List<TodoTask> List(List<int> noList = null) {
+            //  すべて返す
+            if (noList == null) {
+                return tasks;
             }
 
-            return tasks;
+            List<TodoTask> retTask = tasks.Where((task, i) => noList.Contains(i)).ToList();
+
+            return retTask;
+        }
+
+        public List<TodoTask> Update(Dictionary<TodoTask, TodoTask> updateData) {
+            List<TodoTask> retTasks = new List<TodoTask>();
+
+            foreach(var task in tasks) {
+                foreach (var keyData in updateData.Keys) {
+                    if (task.Equals(keyData)) {
+                        task.Update(updateData[keyData]);
+                        retTasks.Add(task);
+                    }
+                }
+            }
+
+            return retTasks;
         }
     }
 }

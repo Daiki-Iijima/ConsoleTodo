@@ -13,12 +13,22 @@ namespace ConsoleTodo {
             this.taskName = taskName;
         }
 
+        public void Update(TodoTask task) {
+            if (taskName != task.taskName) {
+                taskName = task.taskName;
+            }
+        }
+
         public override bool Equals(object obj) {
             if (obj is TodoTask task) {
                 return taskName.Equals(task.taskName);
             }
 
             return false;
+        }
+
+        public override string ToString() {
+            return taskName;
         }
     }
 }
