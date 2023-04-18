@@ -25,21 +25,32 @@ while (isLoop) {
         Console.WriteLine("一覧 : show");
     }
 
-    //  コマンド分解
-    Command command = new Command();
-    command.AddEvent += (arg1) => {
+    //  コマンドの追加
+    CommandInvoker command = new CommandInvoker();
+    command.InvokeCommands.Add(new AddCommand("add", (arg1) => {
         List<TodoTask> taskList = todo.Add(new TodoTask(arg1));
+        OutPutTaskList(taskList);
+    }));
 
-        int No = 0;
-        foreach (TodoTask task in taskList) {
-            No++;
-            Console.WriteLine(No + ":" + task.ToString());
-        }
-    };
+    command.InvokeCommands.Add(new RemoveCommand("remove", (arg1) => {
+        List<TodoTask> taskList = todo.Delete(new List<int>() { arg1 });
+        OutPutTaskList(taskList);
+    }));
 
-    if (command.CheckCommand(input)) {
-    } else {
+    //  実行
+    bool result = command.Invoke(input);
+
+    //  事項できなかった場合
+    if (!result) {
         Console.WriteLine("コマンドが間違っています。");
     }
-
 }
+
+void OutPutTaskList(List<TodoTask> tasks) {
+    int No = 0;
+    foreach (TodoTask task in tasks) {
+        No++;
+        Console.WriteLine(No + ":" + task.ToString());
+    }
+}
+

@@ -10,14 +10,15 @@ namespace Consoleクラスのテスト {
         [Test]
         public void 文字列add_test_を渡すとaddコマンドが発火してtestが返ってくる() {
             //  準備
-            Command command = new Command();
+            CommandInvoker command = new CommandInvoker();
             string argStr  = "";
-            command.AddEvent += (str) => {
+
+            command.InvokeCommands.Add(new AddCommand("add", (str) => {
                 argStr = str;
-            };
+            }));
 
             //  実行
-            bool result = command.CheckCommand("add test");
+            bool result = command.Invoke("add test");
 
             //  検証
             Assert.IsTrue(result);
@@ -27,14 +28,15 @@ namespace Consoleクラスのテスト {
         [Test]
         public void 文字列remove_1を渡すとremoveコマンドが発火して引数で1が返ってくる() {
             //  準備
-            Command command = new Command();
+            CommandInvoker command = new CommandInvoker();
+
             int argInt  = -1;
-            command.RemoveEvenet += (i) => {
+            command.InvokeCommands.Add(new RemoveCommand("remove", (i) => {
                 argInt = i;
-            };
+            }));
 
             //  実行
-            bool result = command.CheckCommand("remove 1");
+            bool result = command.Invoke("remove 1");
 
             //  検証
             Assert.IsTrue(result);
@@ -44,14 +46,15 @@ namespace Consoleクラスのテスト {
         [Test]
         public void 文字列remove_aaを渡すとremoveコマンドが発火せずに失敗する() {
             //  準備
-            Command command = new Command();
+            CommandInvoker command = new CommandInvoker();
+
             int argInt  = -1;
-            command.RemoveEvenet += (i) => {
+            command.InvokeCommands.Add(new RemoveCommand("remove", (i) => {
                 argInt = i;
-            };
+            }));
 
             //  実行
-            bool result = command.CheckCommand("remove aa");
+            bool result = command.Invoke("remove aa");
 
             //  検証
             Assert.IsFalse(result);

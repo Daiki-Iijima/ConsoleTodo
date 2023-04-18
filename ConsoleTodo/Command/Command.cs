@@ -1,29 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleTodo.Command {
-    public class Command {
-        public Action<string> AddEvent { get; set; }
-        public Action<int> RemoveEvenet { get; set; }
+    public abstract class Command {
 
-        public bool CheckCommand(string commandStr) {
-            AddCommand addCommand = new AddCommand("add", AddEvent);
-            RemoveCommand removeCommand = new RemoveCommand("remove", RemoveEvenet);
+        public string WakeWord { get; private set; }
 
-            bool commandResult = false;
+        protected List<string> arg = new List<string>();
 
-            if (addCommand.Check(commandStr)) {
-                commandResult = addCommand.Execute();
+        public Command(string wakeWord) {
+            WakeWord = wakeWord;
+        }
+
+        public bool Check(string commandStr) {
+            List<string> commandAry = SplitCommnad(commandStr);
+
+            if (commandAry[0] == WakeWord) {
+                arg = commandAry.GetRange(1, commandAry.Count - 1);
+                return true;
             }
 
-            if (removeCommand.Check(commandStr)) {
-                commandResult = removeCommand.Execute();
-            }
+            return false;
+        }
 
-            return commandResult;
+        public abstract bool Execute();
+
+        private List<string> SplitCommnad(string commandStr) {
+            return commandStr.Split(' ').ToList();
         }
     }
 }
