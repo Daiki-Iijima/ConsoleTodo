@@ -27,6 +27,12 @@ while (isLoop) {
 
     //  コマンドの追加
     CommandInvoker command = new CommandInvoker();
+
+    //command.Add(new AddCommand("add",ITodoRegister));
+    //command.Add(new RemoveCommand("add",ITodoRegister));
+    //command.Add(new UpdateCommand("add",ITodoRegister));
+    //command.Add(new ShowCommand("add",ITodoRegister));
+
     command.InvokeCommands.Add(new AddCommand("add", (arg1) => {
         List<TodoTask> taskList = todo.Add(new TodoTask(arg1));
         OutPutTaskList(taskList);

@@ -8,116 +8,148 @@ using System.Threading.Tasks;
 
 namespace Consoleクラスのテスト {
     public class ConsoleCommandTest {
-        [Test]
-        public void 文字列add_test_を渡すとaddコマンドが発火してtestが返ってくる() {
-            //  準備
-            CommandInvoker command = new CommandInvoker();
-            string argStr  = "";
+        public class 追加コマンド {
+            private CommandInvoker commandInvoker;
+            [SetUp]
+            public void SetUp() {
+                //  準備
+                commandInvoker = new CommandInvoker();
+            }
 
-            command.InvokeCommands.Add(new AddCommand("add", (str) => {
-                argStr = str;
-            }));
+            [Test]
+            public void 文字列add_test_を渡すとaddコマンドが発火してtestが返ってくる() {
+                string argStr = "";
 
-            //  実行
-            bool result = command.Invoke("add test");
+                commandInvoker.InvokeCommands.Add(new AddCommand("add", (str) => {
+                    argStr = str;
+                }));
 
-            //  検証
-            Assert.IsTrue(result);
-            Assert.AreEqual("test", argStr);
+                //  実行
+                bool result = commandInvoker.Invoke("add test");
+
+                //  検証
+                Assert.IsTrue(result);
+                Assert.AreEqual("test", argStr);
+            }
         }
 
-        [Test]
-        public void 文字列remove_1を渡すとremoveコマンドが発火して引数で1が返ってくる() {
-            //  準備
-            CommandInvoker command = new CommandInvoker();
+        public class 削除コマンド {
 
-            int argInt  = -1;
-            command.InvokeCommands.Add(new RemoveCommand("remove", (i) => {
-                argInt = i;
-            }));
+            private CommandInvoker commandInvoker;
+            [SetUp]
+            public void SetUp() {
+                //  準備
+                commandInvoker = new CommandInvoker();
+            }
 
-            //  実行
-            bool result = command.Invoke("remove 1");
+            [Test]
+            public void 文字列remove_1を渡すとremoveコマンドが発火して引数で1が返ってくる() {
 
-            //  検証
-            Assert.IsTrue(result);
-            Assert.AreEqual(1, argInt);
+                int argInt = -1;
+                commandInvoker.InvokeCommands.Add(new RemoveCommand("remove", (i) => {
+                    argInt = i;
+                }));
+
+                //  実行
+                bool result = commandInvoker.Invoke("remove 1");
+
+                //  検証
+                Assert.IsTrue(result);
+                Assert.AreEqual(1, argInt);
+            }
+
+            [Test]
+            public void 文字列remove_aaを渡すとremoveコマンドが発火せずに失敗する() {
+
+                int argInt = -1;
+                commandInvoker.InvokeCommands.Add(new RemoveCommand("remove", (i) => {
+                    argInt = i;
+                }));
+
+                //  実行
+                bool result = commandInvoker.Invoke("remove aa");
+
+                //  検証
+                Assert.IsFalse(result);
+                Assert.AreEqual(-1, argInt);
+            }
         }
 
-        [Test]
-        public void 文字列remove_aaを渡すとremoveコマンドが発火せずに失敗する() {
-            //  準備
-            CommandInvoker command = new CommandInvoker();
+        public class 更新コマンド {
 
-            int argInt  = -1;
-            command.InvokeCommands.Add(new RemoveCommand("remove", (i) => {
-                argInt = i;
-            }));
+            private CommandInvoker commandInvoker;
+            [SetUp]
+            public void SetUp() {
+                //  準備
+                commandInvoker = new CommandInvoker();
+            }
 
-            //  実行
-            bool result = command.Invoke("remove aa");
+            [Test]
+            public void 文字列_update_0_ttt1_を渡すとupdateコマンドが発火して引数で辞書型の0_test1が返ってくる() {
+                //  準備
+                commandInvoker = new CommandInvoker();
 
-            //  検証
-            Assert.IsFalse(result);
-            Assert.AreEqual(-1, argInt);
+                Dictionary<int, string> argDic = new Dictionary<int, string>();
+                commandInvoker.InvokeCommands.Add(new UpdateCommand("update", (i, taskStr) => {
+                    argDic.Add(i, taskStr);
+                }));
+
+                //  実行
+                bool result = commandInvoker.Invoke("update 0 ttt1");
+
+                //  検証
+                Assert.IsTrue(result);
+
+                Dictionary<int, string> expDic = new Dictionary<int, string>() { { 0, "ttt1" } };
+                Assert.AreEqual(expDic, argDic);
+            }
+
+            [Test]
+            public void 文字列_update_test_を渡すとupdateコマンドが発火せずに失敗する() {
+                //  準備
+                commandInvoker = new CommandInvoker();
+
+                Dictionary<int, string> argDic = new Dictionary<int, string>();
+                commandInvoker.InvokeCommands.Add(new UpdateCommand("update", (i, taskStr) => {
+                    argDic.Add(i, taskStr);
+                }));
+
+                //  実行
+                bool result = commandInvoker.Invoke("update ttt1");
+
+                //  検証
+                Assert.IsFalse(result);
+
+                Dictionary<int, string> expDic = new Dictionary<int, string>();
+                Assert.AreEqual(expDic, argDic);
+            }
         }
 
-        [Test]
-        public void 文字列_update_0_ttt1_を渡すとupdateコマンドが発火して引数で辞書型の0_test1が返ってくる() {
-            //  準備
-            CommandInvoker command = new CommandInvoker();
+        public class 表示コマンド {
+            private CommandInvoker commandInvoker;
+            [SetUp]
+            public void SetUp() {
+                //  準備
+                commandInvoker = new CommandInvoker();
+            }
 
-            Dictionary<int,string> argDic  = new Dictionary<int, string>();
-            command.InvokeCommands.Add(new UpdateCommand("update", (i, taskStr) => {
-                argDic.Add(i, taskStr);
-            }));
+            [Test]
+            public void 文字列_show_を渡すとshowコマンドが発火する() {
+                //  準備
+                commandInvoker = new CommandInvoker();
 
-            //  実行
-            bool result = command.Invoke("update 0 ttt1");
+                bool isInvoked = false;
+                commandInvoker.InvokeCommands.Add(new ShowCommand("show", () => {
+                    isInvoked = true;
+                }));
 
-            //  検証
-            Assert.IsTrue(result);
+                //  実行
+                bool result = commandInvoker.Invoke("show");
 
-            Dictionary<int, string> expDic = new Dictionary<int, string>() { { 0, "ttt1" } };
-            Assert.AreEqual(expDic, argDic);
-        }
-
-        [Test]
-        public void 文字列_update_test_を渡すとupdateコマンドが発火せずに失敗する() {
-            //  準備
-            CommandInvoker command = new CommandInvoker();
-
-            Dictionary<int,string> argDic  = new Dictionary<int, string>();
-            command.InvokeCommands.Add(new UpdateCommand("update", (i, taskStr) => {
-                argDic.Add(i, taskStr);
-            }));
-
-            //  実行
-            bool result = command.Invoke("update ttt1");
-
-            //  検証
-            Assert.IsFalse(result);
-
-            Dictionary<int, string> expDic = new Dictionary<int, string>();
-            Assert.AreEqual(expDic, argDic);
-        }
-
-        [Test]
-        public void 文字列_show_を渡すとshowコマンドが発火する() {
-            //  準備
-            CommandInvoker command = new CommandInvoker();
-
-            bool isInvoked = false;
-            command.InvokeCommands.Add(new ShowCommand("show", () => {
-                isInvoked = true;
-            }));
-
-            //  実行
-            bool result = command.Invoke("show");
-
-            //  検証
-            Assert.IsTrue(result);
-            Assert.IsTrue(isInvoked);
+                //  検証
+                Assert.IsTrue(result);
+                Assert.IsTrue(isInvoked);
+            }
         }
     }
 }
