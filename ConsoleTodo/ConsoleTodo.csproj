@@ -46,7 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\AddCommand.cs" />
     <Compile Include="Command\Command.cs" />
+    <Compile Include="Command\RemoveCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Todo.cs" />
     <Compile Include="TodoTask.cs" />
