@@ -37,6 +37,30 @@ while (isLoop) {
         OutPutTaskList(taskList);
     }));
 
+    command.InvokeCommands.Add(new UpdateCommand("update", (arg1Int,arg2) => {
+
+        //  変更対象のタスクを取得
+        List<TodoTask> targetTask = todo.List(new List<int>() { arg1Int });
+
+        //  対象データと更新データのセットを生成
+        Dictionary<TodoTask, TodoTask> updateData = new Dictionary<TodoTask, TodoTask>();
+        for (int i = 0; i < targetTask.Count; i++) {
+            updateData.Add(targetTask[i], new TodoTask(arg2));
+        }
+
+        List<TodoTask> taskList = todo.Update(updateData);
+
+        //  変更したタスクだけを出す
+        foreach (TodoTask task in taskList) {
+            Console.WriteLine(arg1Int + ":" + task.ToString());
+        }
+    }));
+
+    command.InvokeCommands.Add(new ShowCommand("show",()=>{ 
+        List<TodoTask> taskList = todo.List();
+        OutPutTaskList(taskList);
+    }));
+
     //  実行
     bool result = command.Invoke(input);
 
@@ -49,8 +73,8 @@ while (isLoop) {
 void OutPutTaskList(List<TodoTask> tasks) {
     int No = 0;
     foreach (TodoTask task in tasks) {
-        No++;
         Console.WriteLine(No + ":" + task.ToString());
+        No++;
     }
 }
 

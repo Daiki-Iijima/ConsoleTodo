@@ -1,6 +1,7 @@
 ﻿using ConsoleTodo.Command;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,6 +60,64 @@ namespace Consoleクラスのテスト {
             //  検証
             Assert.IsFalse(result);
             Assert.AreEqual(-1, argInt);
+        }
+
+        [Test]
+        public void 文字列_update_0_ttt1_を渡すとupdateコマンドが発火して引数で辞書型の0_test1が返ってくる() {
+            //  準備
+            CommandInvoker command = new CommandInvoker();
+
+            Dictionary<int,string> argDic  = new Dictionary<int, string>();
+            command.InvokeCommands.Add(new UpdateCommand("update", (i, taskStr) => {
+                argDic.Add(i, taskStr);
+            }));
+
+            //  実行
+            bool result = command.Invoke("update 0 ttt1");
+
+            //  検証
+            Assert.IsTrue(result);
+
+            Dictionary<int, string> expDic = new Dictionary<int, string>() { { 0, "ttt1" } };
+            Assert.AreEqual(expDic, argDic);
+        }
+
+        [Test]
+        public void 文字列_update_test_を渡すとupdateコマンドが発火せずに失敗する() {
+            //  準備
+            CommandInvoker command = new CommandInvoker();
+
+            Dictionary<int,string> argDic  = new Dictionary<int, string>();
+            command.InvokeCommands.Add(new UpdateCommand("update", (i, taskStr) => {
+                argDic.Add(i, taskStr);
+            }));
+
+            //  実行
+            bool result = command.Invoke("update ttt1");
+
+            //  検証
+            Assert.IsFalse(result);
+
+            Dictionary<int, string> expDic = new Dictionary<int, string>();
+            Assert.AreEqual(expDic, argDic);
+        }
+
+        [Test]
+        public void 文字列_show_を渡すとshowコマンドが発火する() {
+            //  準備
+            CommandInvoker command = new CommandInvoker();
+
+            bool isInvoked = false;
+            command.InvokeCommands.Add(new ShowCommand("show", () => {
+                isInvoked = true;
+            }));
+
+            //  実行
+            bool result = command.Invoke("show");
+
+            //  検証
+            Assert.IsTrue(result);
+            Assert.IsTrue(isInvoked);
         }
     }
 }
