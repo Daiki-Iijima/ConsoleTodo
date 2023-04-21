@@ -121,12 +121,9 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
                 Todo todo = new Todo();
                 todo.Add(new TodoTask("test"));
 
-                //  変更対象のタスクを取得
-                List<TodoTask> targetTask = todo.List(new List<int>() { 0 });
-
                 //  対象データと更新データのセットを生成
-                Dictionary<TodoTask, TodoTask> updateData = new Dictionary<TodoTask, TodoTask> {
-                    { targetTask[0], new TodoTask("Test1") }
+                Dictionary<int, string> updateData = new Dictionary<int, string> {
+                    { 0, "Test1" }
                 };
 
                 //  実行
@@ -145,14 +142,11 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
                 todo.Add(new TodoTask("test1"));
                 todo.Add(new TodoTask("test2"));
 
-                //  変更対象のタスクを取得
-                List<TodoTask> targetTask = todo.List(new List<int>() { 0, 1, 2 });
-
                 //  対象データと更新データのセットを生成
-                Dictionary<TodoTask, TodoTask> updateData = new Dictionary<TodoTask, TodoTask> {
-                    { targetTask[0], new TodoTask("Test1") },
-                    { targetTask[1], new TodoTask("TTTT2") },
-                    { targetTask[2], new TodoTask("AAA") }
+                Dictionary<int, string> updateData = new Dictionary<int, string> {
+                    { 0, "Test1" },
+                    { 1, "TTTT2" },
+                    { 2, "AAA" }
                 };
 
                 //  実行

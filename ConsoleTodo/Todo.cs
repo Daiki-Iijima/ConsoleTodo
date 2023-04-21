@@ -17,7 +17,7 @@ namespace ConsoleTodo {
         }
 
         public List<TodoTask> Delete(List<int> deleteList) {
-            tasks = tasks.Where((task, i) =>!deleteList.Contains(i)).ToList();
+            tasks = tasks.Where((task, i) => !deleteList.Contains(i)).ToList();
             return tasks;
         }
 
@@ -32,10 +32,21 @@ namespace ConsoleTodo {
             return retTask;
         }
 
-        public List<TodoTask> Update(Dictionary<TodoTask, TodoTask> updateData) {
+        public List<TodoTask> Update(Dictionary<int, string> targetDic) {
+
+            //  変更対象のタスクを取得
+            List<TodoTask> targetTask = List(targetDic.Keys.ToList());
+
+            //  対象データと更新データのセットを生成
+            Dictionary<TodoTask, TodoTask> updateData = new Dictionary<TodoTask, TodoTask>();
+
+            for (int i = 0; i < targetDic.Count; i++) {
+                updateData.Add(targetTask[i], new TodoTask(targetDic[i]));
+            }
+
             List<TodoTask> retTasks = new List<TodoTask>();
 
-            foreach(var task in tasks) {
+            foreach (var task in tasks) {
                 foreach (var keyData in updateData.Keys) {
                     if (task.Equals(keyData)) {
                         task.Update(updateData[keyData]);

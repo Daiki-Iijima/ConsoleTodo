@@ -5,15 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleTodo.Command {
-    public class ShowCommand : Command {
-        public Action ExcuteAction { get; set; }
+    public class ShowCommand : Command<object> {
 
-        public ShowCommand(string wakeWord,Action executeAction) : base(wakeWord) {
-            ExcuteAction = executeAction;
+        public ShowCommand(string wakeWord,Action<object> executeAction) : base(wakeWord,executeAction) {
         }
 
-        public override bool Execute() {
-            ExcuteAction?.Invoke();
+        public override bool Run() {
+            ExcuteAction?.Invoke(null);
 
             return true;
         }

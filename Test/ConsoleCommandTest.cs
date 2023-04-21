@@ -90,8 +90,8 @@ namespace Consoleクラスのテスト {
                 commandInvoker = new CommandInvoker();
 
                 Dictionary<int, string> argDic = new Dictionary<int, string>();
-                commandInvoker.InvokeCommands.Add(new UpdateCommand("update", (i, taskStr) => {
-                    argDic.Add(i, taskStr);
+                commandInvoker.InvokeCommands.Add(new UpdateCommand("update", (dic) => {
+                    argDic = dic;
                 }));
 
                 //  実行
@@ -110,8 +110,8 @@ namespace Consoleクラスのテスト {
                 commandInvoker = new CommandInvoker();
 
                 Dictionary<int, string> argDic = new Dictionary<int, string>();
-                commandInvoker.InvokeCommands.Add(new UpdateCommand("update", (i, taskStr) => {
-                    argDic.Add(i, taskStr);
+                commandInvoker.InvokeCommands.Add(new UpdateCommand("update", (dic) => {
+                    argDic = dic;
                 }));
 
                 //  実行
@@ -139,7 +139,7 @@ namespace Consoleクラスのテスト {
                 commandInvoker = new CommandInvoker();
 
                 bool isInvoked = false;
-                commandInvoker.InvokeCommands.Add(new ShowCommand("show", () => {
+                commandInvoker.InvokeCommands.Add(new ShowCommand("show", _ => {
                     isInvoked = true;
                 }));
 

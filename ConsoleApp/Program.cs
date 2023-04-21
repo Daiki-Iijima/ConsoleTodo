@@ -28,11 +28,6 @@ while (isLoop) {
     //  コマンドの追加
     CommandInvoker command = new CommandInvoker();
 
-    //command.Add(new AddCommand("add",ITodoRegister));
-    //command.Add(new RemoveCommand("add",ITodoRegister));
-    //command.Add(new UpdateCommand("add",ITodoRegister));
-    //command.Add(new ShowCommand("add",ITodoRegister));
-
     command.InvokeCommands.Add(new AddCommand("add", (arg1) => {
         List<TodoTask> taskList = todo.Add(new TodoTask(arg1));
         OutPutTaskList(taskList);
@@ -43,26 +38,16 @@ while (isLoop) {
         OutPutTaskList(taskList);
     }));
 
-    command.InvokeCommands.Add(new UpdateCommand("update", (arg1Int,arg2) => {
-
-        //  変更対象のタスクを取得
-        List<TodoTask> targetTask = todo.List(new List<int>() { arg1Int });
-
-        //  対象データと更新データのセットを生成
-        Dictionary<TodoTask, TodoTask> updateData = new Dictionary<TodoTask, TodoTask>();
-        for (int i = 0; i < targetTask.Count; i++) {
-            updateData.Add(targetTask[i], new TodoTask(arg2));
-        }
-
-        List<TodoTask> taskList = todo.Update(updateData);
+    command.InvokeCommands.Add(new UpdateCommand("update", dic => {
+        List<TodoTask> taskList = todo.Update(dic);
 
         //  変更したタスクだけを出す
         foreach (TodoTask task in taskList) {
-            Console.WriteLine(arg1Int + ":" + task.ToString());
+            Console.WriteLine(task.ToString());
         }
     }));
 
-    command.InvokeCommands.Add(new ShowCommand("show",()=>{ 
+    command.InvokeCommands.Add(new ShowCommand("show", _ => {
         List<TodoTask> taskList = todo.List();
         OutPutTaskList(taskList);
     }));
