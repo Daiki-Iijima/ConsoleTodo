@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace ConsoleTodo {
     public class TaskFileIO {
@@ -27,10 +28,27 @@ namespace ConsoleTodo {
                 Directory.CreateDirectory(DirectoryPath);
             }
 
-            string json = Newtonsoft.Json.JsonConvert.SerializeObject(tasks);
+            string json = JsonConvert.SerializeObject(tasks);
             File.WriteAllText(FilePath, json);
 
             return true;
         }
+
+        public List<TodoTask> Load() {
+            try {
+                string loadJson = File.ReadAllText(FilePath);
+
+                List<TodoTask> tasks = JsonConvert.DeserializeObject<List<TodoTask>>(loadJson);
+
+                return tasks;
+            } catch (FileNotFoundException) {
+                return null;
+            } catch (DirectoryNotFoundException) {  //  ディレクトリが見つからなかったので読み取り失敗
+                return null;
+            }
+
+        }
+
+
     }
 }

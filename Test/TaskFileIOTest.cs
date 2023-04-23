@@ -19,7 +19,9 @@ namespace タスクデータ永続化機能_TaskFileIOクラス {
             [SetUp]
             public void SetUp() {
                 fileIO = new TaskFileIO();
-                Directory.Delete(fileIO.DirectoryPath, true); //  ディレクトリごと消去
+                if (Directory.Exists(fileIO.DirectoryPath)) {
+                    Directory.Delete(fileIO.DirectoryPath, true); //  ディレクトリごと消去
+                }
 
                 tasks = new List<TodoTask>();
             }
@@ -59,6 +61,40 @@ namespace タスクデータ永続化機能_TaskFileIOクラス {
                 //   検証結果
                 string json = File.ReadAllText(fileIO.FilePath);    //  ファイルから読み取り
                 Assert.AreEqual("[{\"taskName\":\"test1\"},{\"taskName\":\"test2\"}]", json);
+            }
+
+            [Test]
+            public void ファイルがある場合_TestTask_を持ったTaskが返ってくるか() {
+                //  準備
+                fileIO.Save(new List<TodoTask>() { new TodoTask("TestTask") });
+
+                //  実行
+                List<TodoTask> loadTasks = fileIO.Load();
+
+                //   検証結果
+                Assert.AreEqual(new List<TodoTask>() { new TodoTask("TestTask") }, loadTasks);
+            }
+
+            [Test]
+            public void ファイルがない場合_nullが返ってくるか() {
+                //  準備
+                fileIO.Save(new List<TodoTask>() { new TodoTask("TestTask") });
+                File.Delete(fileIO.FilePath);
+
+                //  実行
+                List<TodoTask> loadTasks = fileIO.Load();
+
+                //   検証結果
+                Assert.IsNull(loadTasks);
+            }
+
+            [Test]
+            public void ディレクトリがない場合_nullが返ってくるか() {
+                //  実行
+                List<TodoTask> loadTasks = fileIO.Load();
+
+                //   検証結果
+                Assert.IsNull(loadTasks);
             }
         }
     }
