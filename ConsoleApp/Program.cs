@@ -5,6 +5,17 @@ using ConsoleTodo.Command;
 Todo todo = new Todo();
 
 bool isLoop = true;
+
+TaskFileIO fileIO = new TaskFileIO();
+
+//  タスクを読み込んで追加しておく
+var tasks = fileIO.Load();
+if (tasks != null) {
+    foreach (var task in tasks) {
+        todo.Add(task);
+    }
+}
+
 while (isLoop) {
 
     Console.WriteLine("Todoコマンドを入力してください");
@@ -14,11 +25,11 @@ while (isLoop) {
     if (input == null) {
         isLoop = false;
     }
-    if(input == "exit") {
+    if (input == "exit") {
         isLoop = false;
     }
 
-    if(input == "help") {
+    if (input == "help") {
         Console.WriteLine("追加 : add [TaskName]");
         Console.WriteLine("削除 : remove [TaskNo]");
         Console.WriteLine("更新 : update [TaskNo] [TaskName]");
@@ -30,16 +41,20 @@ while (isLoop) {
 
     command.InvokeCommands.Add(new AddCommand("add", (arg1) => {
         List<TodoTask> taskList = todo.Add(new TodoTask(arg1));
+        fileIO.Save(taskList);
         OutPutTaskList(taskList);
     }));
 
     command.InvokeCommands.Add(new RemoveCommand("remove", (arg1) => {
         List<TodoTask> taskList = todo.Delete(new List<int>() { arg1 });
+        fileIO.Save(taskList);
         OutPutTaskList(taskList);
     }));
 
     command.InvokeCommands.Add(new UpdateCommand("update", dic => {
         List<TodoTask> taskList = todo.Update(dic);
+
+        fileIO.Save(todo.List());
 
         //  変更したタスクだけを出す
         foreach (TodoTask task in taskList) {
