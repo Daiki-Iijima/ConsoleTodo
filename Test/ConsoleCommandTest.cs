@@ -20,7 +20,7 @@ namespace Consoleクラスのテスト {
             }
 
             [Test]
-            public void 文字列add_test_を渡すとaddコマンドが発火して文字列testが返ってくる() {
+            public void 文字列add_testを渡すとaddコマンドが発火して文字列testが引数として分解され結果ととも返される() {
                 commandInvoker.InvokeCommands.Add(new AddCommand("add", new MockTodo()));
 
                 //  実行
@@ -41,7 +41,7 @@ namespace Consoleクラスのテスト {
             }
 
             [Test]
-            public void 文字列remove_1を渡すとremoveコマンドが発火して引数で1が返ってくる() {
+            public void 文字列remove_1を渡すとremoveコマンドが発火して引数として1が返される() {
 
                 commandInvoker.InvokeCommands.Add(new RemoveCommand("remove", new MockTodo()));
 
@@ -74,7 +74,7 @@ namespace Consoleクラスのテスト {
             }
 
             [Test]
-            public void 文字列_update_0_ttt1_を渡すとupdateコマンドが発火して引数で辞書型の0_test1が返ってくる() {
+            public void 文字列update_0_ttt1を渡すとupdateコマンドが発火して引数として辞書型の0_test1が返ってくる() {
                 //  準備
                 commandInvoker = new CommandInvoker();
 
