@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleTodo.Command {
-    public abstract class Command<T> : ICommand {
+    public abstract class BaseCommand<T> : ICommand {
 
         public string WakeWord { get; private set; }
 
@@ -14,7 +14,7 @@ namespace ConsoleTodo.Command {
 
         public Action<T> ExcuteAction { get; set; }
 
-        public Command(string wakeWord,Action<T> excuteAction) {
+        public BaseCommand(string wakeWord,Action<T> excuteAction) {
             WakeWord = wakeWord;
             ExcuteAction = excuteAction;
         }

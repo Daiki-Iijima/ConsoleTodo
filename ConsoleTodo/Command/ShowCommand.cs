@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleTodo.Command {
-    public class ShowCommand : Command<object> {
+    public class ShowCommand : BaseCommand<object> {
 
         public ShowCommand(string wakeWord,Action<object> executeAction) : base(wakeWord,executeAction) {
         }

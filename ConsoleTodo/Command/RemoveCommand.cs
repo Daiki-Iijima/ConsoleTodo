@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleTodo.Command {
-    public class RemoveCommand:Command<int> {
+    public class RemoveCommand:BaseCommand<int> {
 
         public RemoveCommand(string wakeWord, Action<int> excuteAction) : base(wakeWord, excuteAction) {
         }

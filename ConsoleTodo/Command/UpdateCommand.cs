@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleTodo.Command {
-    public class UpdateCommand : Command<Dictionary<int, string>> {
+    public class UpdateCommand : BaseCommand<Dictionary<int, string>> {
 
         public UpdateCommand(string wakeWord,Action<Dictionary<int, string>> executeAction) : base(wakeWord,executeAction) {
             ExcuteAction = executeAction;
