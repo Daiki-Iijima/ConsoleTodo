@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using ConsoleTodo;
 using ConsoleTodo.Command;
+using ConsoleTodo.Command.Result;
 
 Todo todo = new Todo();
 
@@ -38,40 +39,23 @@ while (isLoop) {
 
     //  コマンドの追加
     CommandInvoker command = new CommandInvoker();
-
-    command.InvokeCommands.Add(new AddCommand("add", (arg1) => {
-        List<TodoTask> taskList = todo.Add(new TodoTask(arg1));
-        fileIO.Save(taskList);
-        OutPutTaskList(taskList);
-    }));
-
-    command.InvokeCommands.Add(new RemoveCommand("remove", (arg1) => {
-        List<TodoTask> taskList = todo.Delete(new List<int>() { arg1 });
-        fileIO.Save(taskList);
-        OutPutTaskList(taskList);
-    }));
-
-    command.InvokeCommands.Add(new UpdateCommand("update", dic => {
-        List<TodoTask> taskList = todo.Update(dic);
-
-        fileIO.Save(todo.List());
-
-        //  変更したタスクだけを出す
-        foreach (TodoTask task in taskList) {
-            Console.WriteLine(task.ToString());
-        }
-    }));
-
-    command.InvokeCommands.Add(new ShowCommand("show", _ => {
-        List<TodoTask> taskList = todo.List();
-        OutPutTaskList(taskList);
-    }));
+    command.InvokeCommands.Add(new AddCommand("add", todo));
+    command.InvokeCommands.Add(new RemoveCommand("remove", todo));
+    command.InvokeCommands.Add(new UpdateCommand("update", todo));
+    command.InvokeCommands.Add(new ShowCommand("show", todo));
 
     //  実行
-    bool result = command.Invoke(input);
+    ICommandResult result = command.Invoke(input);
 
-    //  事項できなかった場合
-    if (!result) {
+    //  成功していたら保存
+    if(result is SuccesTodoCommandResult succesResult) {
+        List<TodoTask> resultTasks = succesResult.GetTodoCommandResult();
+        fileIO.Save(resultTasks);
+        OutPutTaskList(resultTasks);
+    }
+
+    //  失敗の場合
+    if (result is ErrorCommandResult) {
         Console.WriteLine("コマンドが間違っています。");
     }
 }

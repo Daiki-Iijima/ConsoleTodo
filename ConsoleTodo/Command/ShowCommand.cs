@@ -1,19 +1,17 @@
-﻿using System;
+﻿using ConsoleTodo.Command.Result;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleTodo.Command {
-    public class ShowCommand : BaseCommand<object> {
-
-        public ShowCommand(string wakeWord,Action<object> executeAction) : base(wakeWord,executeAction) {
+    public class ShowCommand : BaseCommand {
+        public ShowCommand(string wakeWord, ITodo todo) : base(wakeWord, todo) {
         }
 
-        public override bool Run() {
-            ExcuteAction?.Invoke(null);
-
-            return true;
+        public override ICommandResult ExcuteFunc() {
+            return new SuccesTodoCommandResult(todo.List(),arg,"成功");
         }
     }
 }

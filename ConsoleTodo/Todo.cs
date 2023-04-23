@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleTodo {
-    public class Todo {
+    public class Todo : ITodo {
 
         private List<TodoTask> tasks = new List<TodoTask>();
 

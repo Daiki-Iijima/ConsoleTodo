@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleTodo.Command.Result;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -6,17 +7,17 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleTodo.Command {
-    public abstract class BaseCommand<T> : ICommand {
+    public abstract class BaseCommand : ICommand {
 
         public string WakeWord { get; private set; }
 
         protected List<string> arg = new List<string>();
 
-        public Action<T> ExcuteAction { get; set; }
+        protected ITodo todo;
 
-        public BaseCommand(string wakeWord,Action<T> excuteAction) {
+        public BaseCommand(string wakeWord,ITodo todo) {
             WakeWord = wakeWord;
-            ExcuteAction = excuteAction;
+            this.todo = todo;
         }
 
         private string Parse(string commandStr) {
@@ -25,14 +26,18 @@ namespace ConsoleTodo.Command {
             return commandAry[0];
         }
 
-        public abstract bool Run();
+        /// <summary>
+        /// コマンドが発火したときの実装を行う
+        /// </summary>
+        public abstract ICommandResult ExcuteFunc();
 
-        public bool Execute(string commandStr) {
+        public ICommandResult Execute(string commandStr) {
             string command = Parse(commandStr);
             if (command == WakeWord) {
-                return Run();
+                 return ExcuteFunc();
             }
-            return false;
+
+            return new ErrorCommandResult();
         }
 
         private List<string> SplitCommnad(string commandStr) {

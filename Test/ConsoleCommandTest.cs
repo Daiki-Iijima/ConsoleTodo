@@ -1,10 +1,13 @@
-﻿using ConsoleTodo.Command;
+﻿using ConsoleTodo;
+using ConsoleTodo.Command;
+using ConsoleTodo.Command.Result;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Test;
 
 namespace Consoleクラスのテスト {
     public class ConsoleCommandTest {
@@ -17,19 +20,14 @@ namespace Consoleクラスのテスト {
             }
 
             [Test]
-            public void 文字列add_test_を渡すとaddコマンドが発火してtestが返ってくる() {
-                string argStr = "";
-
-                commandInvoker.InvokeCommands.Add(new AddCommand("add", (str) => {
-                    argStr = str;
-                }));
+            public void 文字列add_test_を渡すとaddコマンドが発火して文字列testが返ってくる() {
+                commandInvoker.InvokeCommands.Add(new AddCommand("add", new MockTodo()));
 
                 //  実行
-                bool result = commandInvoker.Invoke("add test");
+                ICommandResult result = commandInvoker.Invoke("add test");
 
                 //  検証
-                Assert.IsTrue(result);
-                Assert.AreEqual("test", argStr);
+                Assert.AreEqual("test", result.GetArgs()[0]);
             }
         }
 
@@ -45,33 +43,24 @@ namespace Consoleクラスのテスト {
             [Test]
             public void 文字列remove_1を渡すとremoveコマンドが発火して引数で1が返ってくる() {
 
-                int argInt = -1;
-                commandInvoker.InvokeCommands.Add(new RemoveCommand("remove", (i) => {
-                    argInt = i;
-                }));
+                commandInvoker.InvokeCommands.Add(new RemoveCommand("remove", new MockTodo()));
 
                 //  実行
-                bool result = commandInvoker.Invoke("remove 1");
+                ICommandResult result = commandInvoker.Invoke("remove 1");
 
                 //  検証
-                Assert.IsTrue(result);
-                Assert.AreEqual(1, argInt);
+                Assert.AreEqual("1", result.GetArgs()[0]);
             }
 
             [Test]
             public void 文字列remove_aaを渡すとremoveコマンドが発火せずに失敗する() {
 
-                int argInt = -1;
-                commandInvoker.InvokeCommands.Add(new RemoveCommand("remove", (i) => {
-                    argInt = i;
-                }));
-
+                commandInvoker.InvokeCommands.Add(new RemoveCommand("remove",new MockTodo()));
                 //  実行
-                bool result = commandInvoker.Invoke("remove aa");
+                ICommandResult result = commandInvoker.Invoke("remove aa");
 
                 //  検証
-                Assert.IsFalse(result);
-                Assert.AreEqual(-1, argInt);
+                Assert.IsTrue(result is ErrorCommandResult);
             }
         }
 
@@ -90,17 +79,14 @@ namespace Consoleクラスのテスト {
                 commandInvoker = new CommandInvoker();
 
                 Dictionary<int, string> argDic = new Dictionary<int, string>();
-                commandInvoker.InvokeCommands.Add(new UpdateCommand("update", (dic) => {
-                    argDic = dic;
-                }));
+                commandInvoker.InvokeCommands.Add(new UpdateCommand("update",new MockTodo()));
 
                 //  実行
-                bool result = commandInvoker.Invoke("update 0 ttt1");
+                ICommandResult result = commandInvoker.Invoke("update 0 ttt1");
 
                 //  検証
-                Assert.IsTrue(result);
-
                 Dictionary<int, string> expDic = new Dictionary<int, string>() { { 0, "ttt1" } };
+                argDic.Add(int.Parse(result.GetArgs()[0]), result.GetArgs()[1]);
                 Assert.AreEqual(expDic, argDic);
             }
 
@@ -109,19 +95,12 @@ namespace Consoleクラスのテスト {
                 //  準備
                 commandInvoker = new CommandInvoker();
 
-                Dictionary<int, string> argDic = new Dictionary<int, string>();
-                commandInvoker.InvokeCommands.Add(new UpdateCommand("update", (dic) => {
-                    argDic = dic;
-                }));
-
+                commandInvoker.InvokeCommands.Add(new UpdateCommand("update", new MockTodo()));
                 //  実行
-                bool result = commandInvoker.Invoke("update ttt1");
+                ICommandResult result = commandInvoker.Invoke("update ttt1");
 
                 //  検証
-                Assert.IsFalse(result);
-
-                Dictionary<int, string> expDic = new Dictionary<int, string>();
-                Assert.AreEqual(expDic, argDic);
+                Assert.IsTrue(result is ErrorCommandResult);
             }
         }
 
@@ -138,17 +117,12 @@ namespace Consoleクラスのテスト {
                 //  準備
                 commandInvoker = new CommandInvoker();
 
-                bool isInvoked = false;
-                commandInvoker.InvokeCommands.Add(new ShowCommand("show", _ => {
-                    isInvoked = true;
-                }));
-
+                commandInvoker.InvokeCommands.Add(new ShowCommand("show",new MockTodo()));
                 //  実行
-                bool result = commandInvoker.Invoke("show");
+                ICommandResult result = commandInvoker.Invoke("show");
 
                 //  検証
-                Assert.IsTrue(result);
-                Assert.IsTrue(isInvoked);
+                Assert.IsTrue(result is SuccesTodoCommandResult);
             }
         }
     }

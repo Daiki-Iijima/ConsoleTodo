@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleTodo.Command.Result;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,17 +10,15 @@ namespace ConsoleTodo.Command {
 
         public List<ICommand> InvokeCommands = new List<ICommand>();
 
-        public bool Invoke(string commandStr) {
-            bool commandResult = false;
-
+        public ICommandResult Invoke(string commandStr) {
             foreach (ICommand command in InvokeCommands) {
-                commandResult = command.Execute(commandStr);
-                if (commandResult) {
-                    break;
+                var commandResult = command.Execute(commandStr);
+                if (commandResult is SuccesTodoCommandResult) {
+                    return commandResult;
                 }
             }
 
-            return commandResult;
+            return new ErrorCommandResult("未設定のエラー");
         }
     }
 }

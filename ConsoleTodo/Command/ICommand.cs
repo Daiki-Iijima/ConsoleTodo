@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace ConsoleTodo.Command {
     public interface ICommand {
-        bool Execute(string commandStr);
+        ICommandResult Execute(string commandStr);
     }
 }
