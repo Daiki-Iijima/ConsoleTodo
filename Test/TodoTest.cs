@@ -1,30 +1,10 @@
 using ConsoleTodo;
 using System.Diagnostics.CodeAnalysis;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Todoオブジェクトを操作する_CRUDクラス {
     public class Todo_Test {
+
         class 追加 {
-            class タスクの生成 {
-
-                [Test]
-                public void testを入力するとtestを持ったtaskを生成する() {
-                    //  準備&実行
-                    TodoTask task = new TodoTask("test");
-
-                    //  検証
-                    Assert.AreEqual(new TodoTask("test"), task);
-                }
-
-                [Test]
-                public void _1234Tを入力すると_1234Tを持ったtaskを生成する() {
-                    //  準備&実行
-                    TodoTask task = new TodoTask("_1234T");
-
-                    //  検証
-                    Assert.AreEqual(new TodoTask("_1234T"), task);
-                }
-            }
 
             private Todo todo;
 
@@ -34,7 +14,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
             }
 
             [Test]
-            public void testを持ったtaskオブジェクト生成して内部リストに保存し追加したリストを返す() {
+            public void 入力が_test_の場合_そのタスクを追加した最新のタスクリストが返される() {
                 //  実行
                 List<TodoTask> resultList = todo.Add(new TodoTask("test"));
 
@@ -42,18 +22,13 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
                 List<TodoTask> tasks = new List<TodoTask> {
                     new TodoTask("test")
                 };
-
-                //   検証
                 Assert.AreEqual(tasks, resultList);
             }
 
             [Test]
-            public void test1_test2を持ったtaskオブジェクト生成して内部リストに保存し追加したリストを返す() {
-                //  準備
-                //  戻り値は帰ってきているが最後に一気にチェックするのでスルー
-                todo.Add(new TodoTask("test1"));
-
+            public void 入力が_test1_と_test2_の場合_そのタスクを追加した最新のタスクリストが返される() {
                 //  実行
+                _ = todo.Add(new TodoTask("test1"));
                 List<TodoTask> resultList = todo.Add(new TodoTask("test2"));
 
                 List<TodoTask> tasks = new List<TodoTask> {
@@ -66,51 +41,111 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
             }
         }
 
-        class 一覧 {
-
+        class 終了 {
             private Todo todo;
-            private List<TodoTask> tasks;
-
             [SetUp]
-            public void SetUp() {
-                //  準備
+            public void Setup() {
                 todo = new Todo();
-                todo.Add(new TodoTask("test1"));
-                todo.Add(new TodoTask("test2"));
-                todo.Add(new TodoTask("test3"));
+            }
+            [Test]
+            public void 入力が_0_の場合_タスクリストの_0番目_のタスクを終了リストへ移動させ最新タスクリストが返される() {
 
-                tasks = new List<TodoTask>() {
-                    new TodoTask("test1"),
-                    new TodoTask("test2"),
-                    new TodoTask("test3"),
+                todo.Add(new TodoTask("Test"));
+
+                List<TodoTask> doneList = todo.Done(new List<int> { 0 });
+
+                List<TodoTask> expected = new List<TodoTask> {
+                    new TodoTask("Test")
                 };
+
+                Assert.AreEqual(expected,doneList);
             }
 
             [Test]
-            public void 追加されているtest1_test2_test3のTaskリストを返す() {
-                //  実行
-                List<TodoTask> actual = todo.List();
+            public void 入力が_0_1_の場合_タスクリストの_0番目_1番目_のタスクを終了リストへ移動させ最新タスクリストが返される() {
 
-                //  結果
-                Assert.AreEqual(tasks, actual);
+                todo.Add(new TodoTask("Test1"));
+                todo.Add(new TodoTask("Test2"));
+
+                List<TodoTask> doneList = todo.Done(new List<int> { 0, 1 });
+
+                List<TodoTask> expected = new List<TodoTask> {
+                    new TodoTask("Test1"),
+                    new TodoTask("Test2")
+                };
+
+                Assert.AreEqual(expected,doneList);
             }
+        }
 
-            [Test]
-            public void タスクリストの1番目のタスクを返す() {
-                //  実行
-                List<TodoTask> actual = todo.List(new List<int>() { 0 });
+        class 一覧 {
+            class 進行中タスク一覧 {
 
-                //  結果
-                Assert.AreEqual(new TodoTask("test1"), actual[0]);
+                private Todo todo;
+                private List<TodoTask> tasks;
+
+                [SetUp]
+                public void SetUp() {
+                    //  準備
+                    todo = new Todo();
+                    todo.Add(new TodoTask("test1"));
+                    todo.Add(new TodoTask("test2"));
+                    todo.Add(new TodoTask("test3"));
+
+                    tasks = new List<TodoTask>() {
+                        new TodoTask("test1"),
+                        new TodoTask("test2"),
+                        new TodoTask("test3"),
+                    };
+                }
+
+                [Test]
+                public void 入力が無い場合すでにタスクリストに追加されているすべてのタスクリストが返される() {
+
+                    List<TodoTask> taskList = todo.List();
+
+                    Assert.AreEqual(tasks, taskList);
+                }
+
+                [Test]
+                public void 入力が_0_場合_すでにタスクリストに追加されているタスクの_0番目_のタスクが返される() {
+                    //  実行
+                    List<TodoTask> actual = todo.List(new List<int>() { 0 });
+
+                    //  結果
+                    Assert.AreEqual(1, actual.Count);
+                    Assert.AreEqual(new TodoTask("test1"), actual[0]);
+                }
+
+                [Test]
+                public void 入力が_0_1_2_の場合_すでにタスクリストに追加されているタスクの_0番目_1番目_2番目_のタスクが返される() {
+                    //  実行
+                    List<TodoTask> actual = todo.List(new List<int>() { 0, 1, 2 });
+
+                    //  結果
+                    Assert.AreEqual(tasks, actual);
+                }
+
             }
+            class 終了タスク一覧 {
 
-            [Test]
-            public void タスクリストの1_2_3番目のタスクを返す() {
-                //  実行
-                List<TodoTask> actual = todo.List(new List<int>() { 0, 1, 2 });
+                private Todo todo;
+                private List<TodoTask> tasks;
 
-                //  結果
-                Assert.AreEqual(tasks, actual);
+                [SetUp]
+                public void SetUp() {
+                    //  準備
+                    todo = new Todo();
+                    todo.Add(new TodoTask("test1"));
+                    todo.Add(new TodoTask("test2"));
+                    todo.Add(new TodoTask("test3"));
+
+                    tasks = new List<TodoTask>() {
+                        new TodoTask("test1"),
+                        new TodoTask("test2"),
+                        new TodoTask("test3"),
+                    };
+                }
             }
         }
 

@@ -9,6 +9,8 @@ namespace ConsoleTodo {
 
         private List<TodoTask> tasks = new List<TodoTask>();
 
+        private List<TodoTask> doneTasks = new List<TodoTask>();
+
         public Todo() { }
 
         public List<TodoTask> Add(TodoTask todoTask) {
@@ -19,6 +21,12 @@ namespace ConsoleTodo {
         public List<TodoTask> Delete(List<int> deleteList) {
             tasks = tasks.Where((task, i) => !deleteList.Contains(i)).ToList();
             return tasks;
+        }
+
+        public List<TodoTask> Done(List<int> numList) {
+            List<TodoTask> machTask = tasks.Where((t, i) => numList.Contains(i)).ToList();
+            doneTasks.AddRange(machTask);
+            return doneTasks;
         }
 
         public List<TodoTask> List(List<int> noList = null) {
