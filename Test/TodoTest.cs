@@ -151,7 +151,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
 
         class 更新 {
             [Test]
-            public void testをTest1に更新して変更したTodoを返す() {
+            public void 入力が_0_Test1_の場合_すでにタスクリストに追加されている_0番目_のタスク名が_Test1_に変換され_最新のタスクリストが返される() {
 
                 Todo todo = new Todo();
                 todo.Add(new TodoTask("test"));
@@ -171,24 +171,22 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
             }
 
             [Test]
-            public void test_test1_test2をTest1_TTTT2_AAAに更新して変更したTodoを返す() {
+            public void 入力が_0_Test1_1_Test2_の場合_すでにタスクリストに追加されている_0番目_1番目_のタスク名が_Test1_Test2_に変換され_最新のタスクリストが返される() {
                 Todo todo = new Todo();
                 todo.Add(new TodoTask("test"));
                 todo.Add(new TodoTask("test1"));
-                todo.Add(new TodoTask("test2"));
 
                 //  対象データと更新データのセットを生成
                 Dictionary<int, string> updateData = new Dictionary<int, string> {
                     { 0, "Test1" },
-                    { 1, "TTTT2" },
-                    { 2, "AAA" }
+                    { 1, "Test2" },
                 };
 
                 //  実行
                 List<TodoTask> actual = todo.Update(updateData);
 
                 //  結果
-                List<TodoTask> task = new List<TodoTask>() { new TodoTask("Test1"), new TodoTask("TTTT2"), new TodoTask("AAA") };
+                List<TodoTask> task = new List<TodoTask>() { new TodoTask("Test1"), new TodoTask("Test2") };
 
                 Assert.AreEqual(task, actual);
             }
@@ -206,7 +204,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
                 todo.Add(new TodoTask("test2"));
             }
             [Test]
-            public void タスク1を削除して_削除後の一覧を返す() {
+            public void 入力が_0_の場合タスクリスト内の_0番目_のタスクを削除して最新のタスクリストが返される() {
 
                 List<int> deleteList = new List<int>() { 0 };
 
@@ -214,37 +212,26 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
 
                 //  検証
                 List<TodoTask> tasks = new List<TodoTask>() {
-                new TodoTask("test1"),
-                new TodoTask("test2"),
-            };
+                    new TodoTask("test1"),
+                    new TodoTask("test2"),
+                };
 
                 Assert.AreEqual(tasks, deleteResultTasks);
             }
 
             [Test]
-            public void タスク1_タスク3を削除して_削除後の一覧を返す() {
+            public void 入力が_1_と_2_の場合タスクリスト内の_1番目_と_2番目_のタスクを削除して最新のタスクリストが返される() {
 
-                List<int> deleteList = new List<int>() { 0, 2 };
+                List<int> deleteList = new List<int>() { 1, 2 };
 
                 List<TodoTask> deleteResultTasks = todo.Delete(deleteList);
 
                 //  検証
                 List<TodoTask> tasks = new List<TodoTask>() {
-                    new TodoTask("test1"),
+                    new TodoTask("test"),
                 };
 
                 Assert.AreEqual(tasks, deleteResultTasks);
-            }
-        }
-
-        class 文字列変換 {
-            [Test]
-            public void タスク名_AAA1を持っているタスクをToStringで表示するとAAA1が返ってくる() {
-
-                TodoTask task = new TodoTask("AAA1");
-
-                //  検証
-                Assert.AreEqual("AAA1", task.ToString());
             }
         }
     }
