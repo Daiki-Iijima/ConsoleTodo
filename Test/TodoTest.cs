@@ -130,7 +130,6 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
             class 終了タスク一覧 {
 
                 private Todo todo;
-                private List<TodoTask> tasks;
 
                 [SetUp]
                 public void SetUp() {
@@ -140,11 +139,45 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
                     todo.Add(new TodoTask("test2"));
                     todo.Add(new TodoTask("test3"));
 
-                    tasks = new List<TodoTask>() {
+                    //  タスクを終了させる
+                    todo.Done(new List<int>() { 0, 1, 2 });
+                }
+
+                [Test]
+                public void 入力が無い場合_すでに終了タスクリストに追加されているすべての終了タスクリストが返される() {
+                    List<TodoTask> doneAllTasks = todo.DoneList();
+
+                    List<TodoTask> expectedTasks = new List<TodoTask>() {
+                        new TodoTask("test1"),
+                        new TodoTask("test2"),
+                        new TodoTask("test3")
+                    };
+
+                    Assert.AreEqual(expectedTasks,doneAllTasks);
+                }
+
+                [Test]
+                public void 入力が_0_場合すでに終了タスクリストに追加されている終了タスクの_0番目_の終了タスクが返される() {
+                    List<TodoTask> doneAllTasks = todo.DoneList(new List<int>() { 0 });
+
+                    List<TodoTask> expectedTasks = new List<TodoTask>() {
+                        new TodoTask("test1"),
+                    };
+
+                    Assert.AreEqual(expectedTasks,doneAllTasks);
+                }
+
+                [Test]
+                public void 入力が_0_1_2_の場合すでに終了タスクリストに追加されている終了タスクの_0番目_1番目_2番目_の終了タスクが返される() {
+                    List<TodoTask> doneAllTasks = todo.DoneList(new List<int>() { 0, 1, 2 });
+
+                    List<TodoTask> expectedTasks = new List<TodoTask>() {
                         new TodoTask("test1"),
                         new TodoTask("test2"),
                         new TodoTask("test3"),
                     };
+
+                    Assert.AreEqual(expectedTasks,doneAllTasks);
                 }
             }
         }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleTodo {
+
     public class Todo : ITodo {
 
         private List<TodoTask> tasks = new List<TodoTask>();
@@ -27,6 +28,14 @@ namespace ConsoleTodo {
             List<TodoTask> machTask = tasks.Where((t, i) => numList.Contains(i)).ToList();
             doneTasks.AddRange(machTask);
             return doneTasks;
+        }
+
+        public List<TodoTask> DoneList(List<int> num = null) {
+            if(num == null) {
+                return doneTasks;
+            }
+
+            return doneTasks.Where((task, i) => num.Contains(i)).ToList();
         }
 
         public List<TodoTask> List(List<int> noList = null) {
