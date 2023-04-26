@@ -10,7 +10,7 @@ namespace ConsoleTodo {
 
         List<TodoTask> Delete(List<int> deleteList);
 
-        List<TodoTask> List(List<int> noList = null);
+        List<TodoTask> ActiveList(List<int> noList = null);
 
         List<TodoTask> Update(Dictionary<int, string> targetDic);
     }

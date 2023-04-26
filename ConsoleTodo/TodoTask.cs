@@ -11,6 +11,8 @@ namespace ConsoleTodo {
         [JsonProperty("taskName")]
         private string taskName;
 
+        public bool IsCompleted { get; private set; }
+
         public TodoTask(string taskName) {
             this.taskName = taskName;
         }
@@ -31,6 +33,10 @@ namespace ConsoleTodo {
 
         public override string ToString() {
             return taskName;
+        }
+
+        public void Done() {
+            IsCompleted = true;
         }
     }
 }

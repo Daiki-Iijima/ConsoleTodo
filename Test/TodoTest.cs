@@ -102,7 +102,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
                 [Test]
                 public void 入力が無い場合すでにタスクリストに追加されているすべてのタスクリストが返される() {
 
-                    List<TodoTask> taskList = todo.List();
+                    List<TodoTask> taskList = todo.ActiveList();
 
                     Assert.AreEqual(tasks, taskList);
                 }
@@ -110,7 +110,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
                 [Test]
                 public void 入力が_0_場合_すでにタスクリストに追加されているタスクの_0番目_のタスクが返される() {
                     //  実行
-                    List<TodoTask> actual = todo.List(new List<int>() { 0 });
+                    List<TodoTask> actual = todo.ActiveList(new List<int>() { 0 });
 
                     //  結果
                     Assert.AreEqual(1, actual.Count);
@@ -120,7 +120,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
                 [Test]
                 public void 入力が_0_1_2_の場合_すでにタスクリストに追加されているタスクの_0番目_1番目_2番目_のタスクが返される() {
                     //  実行
-                    List<TodoTask> actual = todo.List(new List<int>() { 0, 1, 2 });
+                    List<TodoTask> actual = todo.ActiveList(new List<int>() { 0, 1, 2 });
 
                     //  結果
                     Assert.AreEqual(tasks, actual);

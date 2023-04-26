@@ -10,8 +10,6 @@ namespace ConsoleTodo {
 
         private List<TodoTask> tasks = new List<TodoTask>();
 
-        private List<TodoTask> doneTasks = new List<TodoTask>();
-
         public Todo() { }
 
         public List<TodoTask> Add(TodoTask todoTask) {
@@ -19,26 +17,30 @@ namespace ConsoleTodo {
             return tasks;
         }
 
-        public List<TodoTask> Delete(List<int> deleteList) {
+        public List<TodoTask> Delete(List<int> deleteList) {https://trello.com/b/SCO9iQOl/278%E3%81%BE%E3%81%A7%E3%81%AE%E3%82%BF%E3%82%B9%E3%82%AF
             tasks = tasks.Where((task, i) => !deleteList.Contains(i)).ToList();
             return tasks;
         }
 
         public List<TodoTask> Done(List<int> numList) {
-            List<TodoTask> machTask = tasks.Where((t, i) => numList.Contains(i)).ToList();
-            doneTasks.AddRange(machTask);
-            return doneTasks;
+            for (int i = 0; i < tasks.Count; i++) {
+                if (numList.Contains(i)) {
+                    tasks[i].Done();
+                }
+            }
+            return tasks;
         }
 
         public List<TodoTask> DoneList(List<int> num = null) {
+            List<TodoTask> doneList = tasks.Where(task => task.IsCompleted).ToList();
             if(num == null) {
-                return doneTasks;
+                return doneList;
             }
 
-            return doneTasks.Where((task, i) => num.Contains(i)).ToList();
+            return doneList.Where((task, i) => num.Contains(i)).ToList();
         }
 
-        public List<TodoTask> List(List<int> noList = null) {
+        public List<TodoTask> ActiveList(List<int> noList = null) {
             //  すべて返す
             if (noList == null) {
                 return tasks;
@@ -52,7 +54,7 @@ namespace ConsoleTodo {
         public List<TodoTask> Update(Dictionary<int, string> targetDic) {
 
             //  変更対象のタスクを取得
-            List<TodoTask> targetTask = List(targetDic.Keys.ToList());
+            List<TodoTask> targetTask = ActiveList(targetDic.Keys.ToList());
 
             //  対象データと更新データのセットを生成
             Dictionary<TodoTask, TodoTask> updateData = new Dictionary<TodoTask, TodoTask>();

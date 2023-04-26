@@ -50,7 +50,7 @@ namespace タスクデータ永続化機能_TaskFileIOクラス {
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(new List<TodoTask>() { new TodoTask("Test"),new TodoTask("Test1")});
 
                 //  検証結果
-                Assert.AreEqual("[{\"taskName\":\"Test\"},{\"taskName\":\"Test1\"}]", json);
+                Assert.AreEqual("[{\"taskName\":\"Test\",\"IsCompleted\":false},{\"taskName\":\"Test1\",\"IsCompleted\":false}]", json);
             }
 
             [Test]
@@ -60,7 +60,7 @@ namespace タスクデータ永続化機能_TaskFileIOクラス {
 
                 //   検証結果
                 string json = File.ReadAllText(fileIO.FilePath);    //  ファイルから読み取り
-                Assert.AreEqual("[{\"taskName\":\"test1\"},{\"taskName\":\"test2\"}]", json);
+                Assert.AreEqual("[{\"taskName\":\"test1\",\"IsCompleted\":false},{\"taskName\":\"test2\",\"IsCompleted\":false}]", json);
             }
 
             [Test]

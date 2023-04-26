@@ -11,7 +11,7 @@ namespace ConsoleTodo.Command {
         }
 
         public override ICommandResult ExcuteFunc() {
-            return new SuccesTodoCommandResult(todo.List(),arg,"成功");
+            return new SuccesTodoCommandResult(todo.ActiveList(),arg,"成功");
         }
     }
 }
