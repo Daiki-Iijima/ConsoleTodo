@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleTodo.Command {
-    public class ShowCommand : BaseCommand {
-        public ShowCommand(string wakeWord, ITodo todo) : base(wakeWord, todo) {
+    public class ListCommand : BaseCommand {
+        public ListCommand(ITodo todo) : base("list", todo) {
         }
 
         public override ICommandResult ExcuteFunc() {

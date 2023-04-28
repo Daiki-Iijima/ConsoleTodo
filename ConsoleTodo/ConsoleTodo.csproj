@@ -53,11 +53,11 @@
     <Compile Include="Command\BaseCommand.cs" />
     <Compile Include="Command\CommandInvoker.cs" />
     <Compile Include="Command\ICommand.cs" />
-    <Compile Include="Command\RemoveCommand.cs" />
+    <Compile Include="Command\DeleteCommand.cs" />
     <Compile Include="Command\Result\ErrorCommandResult.cs" />
     <Compile Include="Command\Result\ITodoCommandResult.cs" />
     <Compile Include="Command\Result\SuccesCommandResult.cs" />
-    <Compile Include="Command\ShowCommand.cs" />
+    <Compile Include="Command\ListCommand.cs" />
     <Compile Include="Command\UpdateCommand.cs" />
     <Compile Include="Command\Result\ICommandResult.cs" />
     <Compile Include="ITodo.cs" />

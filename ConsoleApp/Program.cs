@@ -39,10 +39,10 @@ while (isLoop) {
 
     //  コマンドの追加
     CommandInvoker command = new CommandInvoker();
-    command.InvokeCommands.Add(new AddCommand("add", todo));
-    command.InvokeCommands.Add(new RemoveCommand("remove", todo));
-    command.InvokeCommands.Add(new UpdateCommand("update", todo));
-    command.InvokeCommands.Add(new ShowCommand("show", todo));
+    command.InvokeCommands.Add(new AddCommand(todo));
+    command.InvokeCommands.Add(new DeleteCommand(todo));
+    command.InvokeCommands.Add(new UpdateCommand(todo));
+    command.InvokeCommands.Add(new ListCommand(todo));
 
     //  実行
     ICommandResult result = command.Invoke(input);

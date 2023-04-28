@@ -1,103 +1,205 @@
 ﻿using ConsoleTodo;
 using ConsoleTodo.Command;
 using ConsoleTodo.Command.Result;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Test;
 
 namespace Consoleクラスのテスト {
     public class ConsoleCommandTest {
+
+        /// <summary>
+        /// 初期化のヘルパーメソッド
+        /// </summary>
+        /// <param name="mockTodo"></param>
+        /// <param name="tasks"></param>
+        /// <param name="commandInvoker"></param>
+        protected static void SetUpCommonLogic(out Mock<ITodo> mockTodo, out List<TodoTask> tasks, out CommandInvoker commandInvoker) {
+            mockTodo = new Mock<ITodo>();
+            tasks = new List<TodoTask>();
+            commandInvoker = new CommandInvoker();
+        }
+
         public class 追加コマンド {
+
+            private Mock<ITodo> mockTodo;
+            private List<TodoTask> tasks;
             private CommandInvoker commandInvoker;
+
             [SetUp]
             public void SetUp() {
                 //  準備
-                commandInvoker = new CommandInvoker();
+                SetUpCommonLogic(out mockTodo, out tasks, out commandInvoker);
+
+                //  Addメソッドが実行された時の動作を記述
+                mockTodo.Setup(todo => todo.Add(It.IsAny<TodoTask>())).
+                    Callback<TodoTask>(task => tasks.Add(task));
+
+                commandInvoker.InvokeCommands.Add(new AddCommand(mockTodo.Object));
             }
 
             [Test]
-            public void 文字列add_testを渡すとaddコマンドが発火して文字列testが引数として分解され結果ととも返される() {
-                commandInvoker.InvokeCommands.Add(new AddCommand("add", new MockTodo()));
-
+            public void 入力が_add_test_の場合_testタスク_がタスクリストに追加される() {
                 //  実行
-                ICommandResult result = commandInvoker.Invoke("add test");
+                _ = commandInvoker.Invoke("add test");
 
                 //  検証
-                Assert.AreEqual("test", result.GetArgs()[0]);
+                List<TodoTask> expectedTasks = new List<TodoTask>() {
+                    new TodoTask("test")
+                };
+
+                CollectionAssert.AreEqual(expectedTasks, tasks);
+                mockTodo.Verify(m => m.Add(It.IsAny<TodoTask>()), Times.Once());
+            }
+
+            [Test]
+            public void 入力が_add_test_test2_の場合_testタスク_test2タスク_がタスクリストに追加される() {
+                //  実行
+                _ = commandInvoker.Invoke("add test test2");
+
+                //  検証
+                List<TodoTask> expectedTasks = new List<TodoTask>() {
+                    new TodoTask("test"),
+                    new TodoTask("test2")
+                };
+
+                Assert.AreEqual(expectedTasks, tasks);
+                mockTodo.Verify(m => m.Add(It.IsAny<TodoTask>()), Times.Exactly(2));
             }
         }
 
         public class 削除コマンド {
 
+            private Mock<ITodo> mockTodo;
+            private List<TodoTask> tasks;
             private CommandInvoker commandInvoker;
+
             [SetUp]
             public void SetUp() {
+
+                SetUpCommonLogic(out mockTodo, out tasks, out commandInvoker);
+
                 //  準備
-                commandInvoker = new CommandInvoker();
+                tasks = new List<TodoTask> {
+                    new TodoTask("test1"),
+                    new TodoTask("test2"),
+                    new TodoTask("test3")
+                };
+
+                //  Addメソッドが実行された時の動作を記述
+                mockTodo.Setup(todo => todo.Delete(It.IsAny<List<int>>())).
+                    Callback<List<int>>(numList => {
+                        numList.Sort();
+                        numList.Reverse();
+                        foreach (int i in numList) {
+                            tasks.RemoveAt(i);
+                        }
+                    });
+
+                commandInvoker.InvokeCommands.Add(new DeleteCommand(mockTodo.Object));
             }
 
             [Test]
-            public void 文字列remove_1を渡すとremoveコマンドが発火して引数として1が返される() {
-
-                commandInvoker.InvokeCommands.Add(new RemoveCommand("remove", new MockTodo()));
-
+            public void 入力が_delete_0_の場合_タスクリストの_0番目_のタスクが消去される() {
                 //  実行
-                ICommandResult result = commandInvoker.Invoke("remove 1");
+                _ = commandInvoker.Invoke("delete 0");
 
                 //  検証
-                Assert.AreEqual("1", result.GetArgs()[0]);
+                List<TodoTask> expectedTasks = new List<TodoTask> {
+                    new TodoTask("test2"),
+                    new TodoTask("test3")
+                };
+                Assert.AreEqual(expectedTasks, tasks);
+                mockTodo.Verify(m => m.Delete(It.IsAny<List<int>>()), Times.Once());
             }
 
             [Test]
-            public void 文字列remove_aaを渡すとremoveコマンドが発火せずに失敗する() {
+            public void 入力が_delete_0_1_の場合_タスクリストの_0番目_1番目_のタスクが消去さる() {
+                //  実行
+                _ = commandInvoker.Invoke("delete 0 1");
 
-                commandInvoker.InvokeCommands.Add(new RemoveCommand("remove",new MockTodo()));
+                //  検証
+                List<TodoTask> expectedTasks = new List<TodoTask> {
+                    new TodoTask("test3")
+                };
+
+                Assert.AreEqual(expectedTasks, tasks);
+                mockTodo.Verify(m => m.Delete(It.IsAny<List<int>>()), Times.Exactly(2));
+            }
+
+            [Test]
+            public void 入力が_delete_aa_の場合_コマンドが失敗する() {
                 //  実行
                 ICommandResult result = commandInvoker.Invoke("remove aa");
 
                 //  検証
                 Assert.IsTrue(result is ErrorCommandResult);
+                mockTodo.Verify(m => m.Delete(It.IsAny<List<int>>()), Times.Never());
             }
+
         }
 
         public class 更新コマンド {
 
             private CommandInvoker commandInvoker;
+            private Mock<ITodo> mockTodo;
+            private List<TodoTask> expectedTasks;
+            private List<TodoTask> actualTasks;
+
             [SetUp]
             public void SetUp() {
                 //  準備
-                commandInvoker = new CommandInvoker();
+                SetUpCommonLogic(out mockTodo, out expectedTasks, out commandInvoker);
+
+                commandInvoker.InvokeCommands.Add(new UpdateCommand(mockTodo.Object));
+
+                expectedTasks = new List<TodoTask>() {
+                    new TodoTask("test1"),
+                    new TodoTask("test2"),
+                    new TodoTask("test3"),
+                };
+
+                actualTasks = new List<TodoTask>(expectedTasks);
+
+                //  Addメソッドが実行された時の動作を記述
+                mockTodo.Setup(todo => todo.Update(It.IsAny<Dictionary<int, string>>())).
+                    Callback<Dictionary<int, string>>(dic => {
+                        foreach (int key in dic.Keys) {
+                            actualTasks[key] = new TodoTask(dic[key]);
+                        }
+                    });
+
             }
 
             [Test]
-            public void 文字列update_0_ttt1を渡すとupdateコマンドが発火して引数として辞書型の0_test1が返ってくる() {
-                //  準備
-                commandInvoker = new CommandInvoker();
-
-                Dictionary<int, string> argDic = new Dictionary<int, string>();
-                commandInvoker.InvokeCommands.Add(new UpdateCommand("update",new MockTodo()));
-
+            public void 入力が_update_0_ttt1_の場合_タスクリストの_0番目_のタスクがttt1に変更される() {
                 //  実行
                 ICommandResult result = commandInvoker.Invoke("update 0 ttt1");
 
                 //  検証
-                Dictionary<int, string> expDic = new Dictionary<int, string>() { { 0, "ttt1" } };
-                argDic.Add(int.Parse(result.GetArgs()[0]), result.GetArgs()[1]);
-                Assert.AreEqual(expDic, argDic);
+                expectedTasks[0] = new TodoTask("ttt1");
+                Assert.AreEqual(expectedTasks, actualTasks);
             }
 
             [Test]
-            public void 文字列_update_test_を渡すとupdateコマンドが発火せずに失敗する() {
-                //  準備
-                commandInvoker = new CommandInvoker();
-
-                commandInvoker.InvokeCommands.Add(new UpdateCommand("update", new MockTodo()));
+            public void 入力が_update_0_ttt1_1_ttt2_の場合_タスクリストの_0番目_1番目_のタスクが_ttt1_ttt2_に変更される() {
                 //  実行
-                ICommandResult result = commandInvoker.Invoke("update ttt1");
+                ICommandResult result = commandInvoker.Invoke("update 0 ttt1 1 ttt2");
+
+                //  検証
+                expectedTasks[0] = new TodoTask("ttt1");
+                expectedTasks[1] = new TodoTask("ttt2");
+                Assert.AreEqual(expectedTasks, actualTasks);
+            }
+
+            [Test]
+            public void 入力が_update_test_の場合_コマンドが失敗する() {
+                //  実行
+                ICommandResult result = commandInvoker.Invoke("update test");
 
                 //  検証
                 Assert.IsTrue(result is ErrorCommandResult);
@@ -106,23 +208,44 @@ namespace Consoleクラスのテスト {
 
         public class 表示コマンド {
             private CommandInvoker commandInvoker;
+            private Mock<ITodo> mockTodo;
+
+            private List<TodoTask> expectedTasks;
+            private List<TodoTask> actualTasks;
+
             [SetUp]
             public void SetUp() {
                 //  準備
-                commandInvoker = new CommandInvoker();
+                SetUpCommonLogic(out mockTodo, out expectedTasks, out commandInvoker);
+
+                commandInvoker.InvokeCommands.Add(new ListCommand(mockTodo.Object));
+
+                expectedTasks = new List<TodoTask>() {
+                    new TodoTask("test1"),
+                    new TodoTask("test2"),
+                    new TodoTask("test3"),
+                };
+
+                actualTasks = new List<TodoTask>(expectedTasks);
+
+                //  Addメソッドが実行された時の動作を記述
+                mockTodo.Setup(todo => todo.ActiveList(It.IsAny<List<int>>())).
+                    Returns((List<int> numList) => {
+                        if (numList == null) {
+                            return expectedTasks;
+                        }
+
+                        return expectedTasks;
+                    });
             }
 
             [Test]
-            public void 文字列_show_を渡すとshowコマンドが発火する() {
-                //  準備
-                commandInvoker = new CommandInvoker();
-
-                commandInvoker.InvokeCommands.Add(new ShowCommand("show",new MockTodo()));
+            public void 入力が_list_の場合_タスク一覧が返される() {
                 //  実行
-                ICommandResult result = commandInvoker.Invoke("show");
+                ITodoCommandResult result = (ITodoCommandResult)commandInvoker.Invoke("list");
 
                 //  検証
-                Assert.IsTrue(result is SuccesTodoCommandResult);
+                Assert.AreEqual(expectedTasks, result.GetTodoCommandResult());
             }
         }
     }
