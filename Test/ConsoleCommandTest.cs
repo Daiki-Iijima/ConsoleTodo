@@ -36,8 +36,8 @@ namespace Consoleクラスのテスト {
                 SetUpCommonLogic(out mockTodo, out tasks, out commandInvoker);
 
                 //  Addメソッドが実行された時の動作を記述
-                mockTodo.Setup(todo => todo.Add(It.IsAny<TodoTask>())).
-                    Callback<TodoTask>(task => tasks.Add(task));
+                mockTodo.Setup(todo => todo.Add(It.IsAny<List<TodoTask>>())).
+                    Callback<List<TodoTask>>(taskValues => tasks.AddRange(taskValues));
 
                 commandInvoker.InvokeCommands.Add(new AddCommand(mockTodo.Object));
             }
@@ -53,7 +53,7 @@ namespace Consoleクラスのテスト {
                 };
 
                 CollectionAssert.AreEqual(expectedTasks, tasks);
-                mockTodo.Verify(m => m.Add(It.IsAny<TodoTask>()), Times.Once());
+                mockTodo.Verify(m => m.Add(It.IsAny<List<TodoTask>>()), Times.Once());
             }
 
             [Test]
@@ -68,7 +68,7 @@ namespace Consoleクラスのテスト {
                 };
 
                 Assert.AreEqual(expectedTasks, tasks);
-                mockTodo.Verify(m => m.Add(It.IsAny<TodoTask>()), Times.Exactly(2));
+                mockTodo.Verify(m => m.Add(It.IsAny<List<TodoTask>>()), Times.Once());
             }
         }
 
@@ -128,7 +128,7 @@ namespace Consoleクラスのテスト {
                 };
 
                 Assert.AreEqual(expectedTasks, tasks);
-                mockTodo.Verify(m => m.Delete(It.IsAny<List<int>>()), Times.Exactly(2));
+                mockTodo.Verify(m => m.Delete(It.IsAny<List<int>>()), Times.Once());
             }
 
             [Test]

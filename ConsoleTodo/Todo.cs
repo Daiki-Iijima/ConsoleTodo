@@ -12,8 +12,8 @@ namespace ConsoleTodo {
 
         public Todo() { }
 
-        public List<TodoTask> Add(TodoTask todoTask) {
-            tasks.Add(todoTask);
+        public List<TodoTask> Add(List<TodoTask> todoTask) {
+            tasks.AddRange(todoTask);
             return tasks;
         }
 

@@ -16,7 +16,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
             [Test]
             public void 入力が_test_の場合_そのタスクを追加した最新のタスクリストが返される() {
                 //  実行
-                List<TodoTask> resultList = todo.Add(new TodoTask("test"));
+                List<TodoTask> resultList = todo.Add(new List<TodoTask>() { new TodoTask("test") });
 
                 //  検証
                 List<TodoTask> tasks = new List<TodoTask> {
@@ -28,8 +28,8 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
             [Test]
             public void 入力が_test1_と_test2_の場合_そのタスクを追加した最新のタスクリストが返される() {
                 //  実行
-                _ = todo.Add(new TodoTask("test1"));
-                List<TodoTask> resultList = todo.Add(new TodoTask("test2"));
+                _ = todo.Add(new List<TodoTask>() { new TodoTask("test1") });
+                List<TodoTask> resultList = todo.Add(new List<TodoTask>() { new TodoTask("test2") });
 
                 List<TodoTask> tasks = new List<TodoTask> {
                     new TodoTask("test1"),
@@ -50,7 +50,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
             [Test]
             public void 入力が_0_の場合_タスクリストの_0番目_のタスクを終了リストへ移動させ最新タスクリストが返される() {
 
-                todo.Add(new TodoTask("Test"));
+                todo.Add(new List<TodoTask>() { new TodoTask("Test") });
 
                 List<TodoTask> doneList = todo.Done(new List<int> { 0 });
 
@@ -64,8 +64,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
             [Test]
             public void 入力が_0_1_の場合_タスクリストの_0番目_1番目_のタスクを終了リストへ移動させ最新タスクリストが返される() {
 
-                todo.Add(new TodoTask("Test1"));
-                todo.Add(new TodoTask("Test2"));
+                todo.Add(new List<TodoTask>() { new TodoTask("Test1"), new TodoTask("Test2") });
 
                 List<TodoTask> doneList = todo.Done(new List<int> { 0, 1 });
 
@@ -87,16 +86,14 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
                 [SetUp]
                 public void SetUp() {
                     //  準備
-                    todo = new Todo();
-                    todo.Add(new TodoTask("test1"));
-                    todo.Add(new TodoTask("test2"));
-                    todo.Add(new TodoTask("test3"));
-
                     tasks = new List<TodoTask>() {
                         new TodoTask("test1"),
                         new TodoTask("test2"),
                         new TodoTask("test3"),
                     };
+
+                    todo = new Todo();
+                    todo.Add(tasks);
                 }
 
                 [Test]
@@ -135,9 +132,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
                 public void SetUp() {
                     //  準備
                     todo = new Todo();
-                    todo.Add(new TodoTask("test1"));
-                    todo.Add(new TodoTask("test2"));
-                    todo.Add(new TodoTask("test3"));
+                    todo.Add(new List<TodoTask>() { new TodoTask("test1"), new TodoTask("test2"), new TodoTask("test3") });
 
                     //  タスクを終了させる
                     todo.Done(new List<int>() { 0, 1, 2 });
@@ -187,7 +182,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
             public void 入力が_0_Test1_の場合_すでにタスクリストに追加されている_0番目_のタスク名が_Test1_に変換され_最新のタスクリストが返される() {
 
                 Todo todo = new Todo();
-                todo.Add(new TodoTask("test"));
+                todo.Add(new List<TodoTask>() { new TodoTask("test"), new TodoTask("test1") });
 
                 //  対象データと更新データのセットを生成
                 Dictionary<int, string> updateData = new Dictionary<int, string> {
@@ -206,8 +201,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
             [Test]
             public void 入力が_0_Test1_1_Test2_の場合_すでにタスクリストに追加されている_0番目_1番目_のタスク名が_Test1_Test2_に変換され_最新のタスクリストが返される() {
                 Todo todo = new Todo();
-                todo.Add(new TodoTask("test"));
-                todo.Add(new TodoTask("test1"));
+                todo.Add(new List<TodoTask>() { new TodoTask("test"), new TodoTask("test1") });
 
                 //  対象データと更新データのセットを生成
                 Dictionary<int, string> updateData = new Dictionary<int, string> {
@@ -232,9 +226,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
             [SetUp]
             public void SetUp() {
                 todo = new Todo();
-                todo.Add(new TodoTask("test"));
-                todo.Add(new TodoTask("test1"));
-                todo.Add(new TodoTask("test2"));
+                todo.Add(new List<TodoTask>() { new TodoTask("test"), new TodoTask("test1"), new TodoTask("test2") });
             }
             [Test]
             public void 入力が_0_の場合タスクリスト内の_0番目_のタスクを削除して最新のタスクリストが返される() {

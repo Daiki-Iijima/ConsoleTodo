@@ -19,8 +19,9 @@ namespace ConsoleTodo.Command {
             if (arg[0] != null) {
                 List<TodoTask> tasks = new List<TodoTask>();
                 foreach (string taskName in arg) {
-                    tasks = todo.Add(new TodoTask(taskName));
+                    tasks.Add(new TodoTask(taskName));
                 }
+                tasks = todo.Add(tasks);
                 return new SuccesTodoCommandResult(tasks, arg, "成功");
             }
 

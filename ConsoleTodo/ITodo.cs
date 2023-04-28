@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ConsoleTodo {
     public interface ITodo {
-        List<TodoTask> Add(TodoTask todoTask);
+        List<TodoTask> Add(List<TodoTask> todoTask);
 
         List<TodoTask> Delete(List<int> deleteList);
 

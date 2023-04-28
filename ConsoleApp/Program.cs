@@ -12,9 +12,7 @@ TaskFileIO fileIO = new TaskFileIO();
 //  タスクを読み込んで追加しておく
 var tasks = fileIO.Load();
 if (tasks != null) {
-    foreach (var task in tasks) {
-        todo.Add(task);
-    }
+    todo.Add(tasks);
 }
 
 while (isLoop) {
