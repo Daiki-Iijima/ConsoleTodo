@@ -29,18 +29,22 @@ while (isLoop) {
     }
 
     if (input == "help") {
-        Console.WriteLine("追加 : add [TaskName]");
-        Console.WriteLine("削除 : remove [TaskNo]");
-        Console.WriteLine("更新 : update [TaskNo] [TaskName]");
-        Console.WriteLine("一覧 : show");
+        Console.WriteLine("追加 : add [TaskName] ..");
+        Console.WriteLine("終了 : done [TaskNo] ..");
+        Console.WriteLine("削除 : remove [TaskNo] ..");
+        Console.WriteLine("更新 : update [TaskNo] [TaskName] ...");
+        Console.WriteLine("進行中一覧 : list");
+        Console.WriteLine("終了一覧 : donelist");
     }
 
     //  コマンドの追加
     CommandInvoker command = new CommandInvoker();
     command.InvokeCommands.Add(new AddCommand(todo));
+    command.InvokeCommands.Add(new DoneCommand(todo));
     command.InvokeCommands.Add(new DeleteCommand(todo));
     command.InvokeCommands.Add(new UpdateCommand(todo));
     command.InvokeCommands.Add(new ListCommand(todo));
+    command.InvokeCommands.Add(new DoneListCommand(todo));
 
     //  実行
     ICommandResult result = command.Invoke(input);

@@ -46,31 +46,28 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
             [SetUp]
             public void Setup() {
                 todo = new Todo();
+                todo.Add(new List<TodoTask>() { new TodoTask("Test1"), new TodoTask("Test2"), new TodoTask("Test3") });
             }
             [Test]
-            public void 入力が_0_の場合_タスクリストの_0番目_のタスクを終了リストへ移動させ最新タスクリストが返される() {
-
-                todo.Add(new List<TodoTask>() { new TodoTask("Test") });
+            public void 入力が_0_の場合_タスクリストの_0番目_のタスクを終了リストへ移動させ最新の進行中タスクリストが返される() {
 
                 List<TodoTask> doneList = todo.Done(new List<int> { 0 });
 
                 List<TodoTask> expected = new List<TodoTask> {
-                    new TodoTask("Test")
+                    new TodoTask("Test2"),
+                    new TodoTask("Test3")
                 };
 
                 Assert.AreEqual(expected,doneList);
             }
 
             [Test]
-            public void 入力が_0_1_の場合_タスクリストの_0番目_1番目_のタスクを終了リストへ移動させ最新タスクリストが返される() {
-
-                todo.Add(new List<TodoTask>() { new TodoTask("Test1"), new TodoTask("Test2") });
+            public void 入力が_0_1_の場合_タスクリストの_0番目_1番目_のタスクを終了リストへ移動させ最新の進行中タスクリストが返される() {
 
                 List<TodoTask> doneList = todo.Done(new List<int> { 0, 1 });
 
                 List<TodoTask> expected = new List<TodoTask> {
-                    new TodoTask("Test1"),
-                    new TodoTask("Test2")
+                    new TodoTask("Test3")
                 };
 
                 Assert.AreEqual(expected,doneList);

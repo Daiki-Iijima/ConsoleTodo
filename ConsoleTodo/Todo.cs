@@ -28,12 +28,12 @@ namespace ConsoleTodo {
                     tasks[i].Done();
                 }
             }
-            return tasks;
+            return new List<TodoTask>(tasks.Where(task => !task.IsCompleted));
         }
 
         public List<TodoTask> DoneList(List<int> num = null) {
             List<TodoTask> doneList = tasks.Where(task => task.IsCompleted).ToList();
-            if(num == null) {
+            if (num == null || num.Count == 0) {
                 return doneList;
             }
 
@@ -42,8 +42,8 @@ namespace ConsoleTodo {
 
         public List<TodoTask> ActiveList(List<int> noList = null) {
             //  すべて返す
-            if (noList == null) {
-                return tasks;
+            if (noList == null || noList.Count == 0) {
+                return tasks.Where(task => !task.IsCompleted).ToList();
             }
 
             List<TodoTask> retTask = tasks.Where((task, i) => noList.Contains(i)).ToList();
