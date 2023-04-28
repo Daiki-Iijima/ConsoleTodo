@@ -73,6 +73,90 @@ namespace Consoleクラスのテスト {
                 mockTodo.Verify(m => m.Add(It.IsAny<List<TodoTask>>()), Times.Once());
             }
         }
+        
+        public class 終了コマンド {
+
+#nullable disable
+            private Mock<ITodo> mockTodo;
+            private List<TodoTask> tasks;
+            private List<TodoTask> doneTasks;
+            private CommandInvoker commandInvoker;
+#nullable enable
+
+            [SetUp]
+            public void SetUp() {
+
+                SetUpCommonLogic(out mockTodo, out tasks, out commandInvoker);
+
+                doneTasks = new List<TodoTask>();
+
+                //  準備
+                tasks = new List<TodoTask> {
+                    new TodoTask("test1"),
+                    new TodoTask("test2"),
+                    new TodoTask("test3")
+                };
+
+
+                //  Addメソッドが実行された時の動作を記述
+                mockTodo.Setup(todo => todo.Done(It.IsAny<List<int>>())).
+                    Callback<List<int>>(numList => {
+                        //  終了タスクの抽出
+                        List<TodoTask> dones = tasks.Where((task, i) => numList.Contains(i)).ToList();
+
+                        //   既存タスクを消去
+                        numList.Sort();
+                        numList.Reverse();
+                        foreach (int i in numList) {
+                            tasks.RemoveAt(i);
+                        }
+
+                        doneTasks.AddRange(dones);
+                    });
+
+                commandInvoker.InvokeCommands.Add(new DoneCommand(mockTodo.Object));
+            }
+
+            [Test]
+            public void 入力が_done_0_の場合_タスクリストの_0番目_のタスクが終了タスクリストに追加される() {
+                //  実行
+                _ = commandInvoker.Invoke("done 0");
+
+                //  検証
+                CollectionAssert.AreEqual(new List<TodoTask>() { new TodoTask("test1") }, doneTasks);
+                mockTodo.Verify(m => m.Done(It.IsAny<List<int>>()), Times.Once());
+            }
+
+            [Test]
+            public void 入力が_done_0_の場合_タスクリストの_0番目_のタスクがタスクリストから消去される() {
+                //  実行
+                _ = commandInvoker.Invoke("done 0");
+
+                //  検証
+                CollectionAssert.AreEqual(new List<TodoTask>() { new TodoTask("test2"), new TodoTask("test3") }, tasks);
+                mockTodo.Verify(m => m.Done(It.IsAny<List<int>>()), Times.Once());
+            }
+
+            [Test]
+            public void 入力が_done_0_1_の場合_タスクリストの_0番目_1番目_のタスクが終了タスクリストに追加される() {
+                //  実行
+                _ = commandInvoker.Invoke("done 0 1");
+
+                //  検証
+                CollectionAssert.AreEqual(new List<TodoTask>() { new TodoTask("test1"), new TodoTask("test2") }, doneTasks);
+                mockTodo.Verify(m => m.Done(It.IsAny<List<int>>()), Times.Once());
+            }
+
+            [Test]
+            public void 入力が_done_0_1_の場合_タスクリストの_0番目_1番目_のタスクがタスクリストから消去される() {
+                //  実行
+                _ = commandInvoker.Invoke("done 0 1");
+
+                //  検証
+                CollectionAssert.AreEqual(new List<TodoTask>() { new TodoTask("test3") }, tasks);
+                mockTodo.Verify(m => m.Done(It.IsAny<List<int>>()), Times.Once());
+            }
+        }
 
         public class 削除コマンド {
 

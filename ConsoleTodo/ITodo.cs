@@ -8,6 +8,8 @@ namespace ConsoleTodo {
     public interface ITodo {
         List<TodoTask> Add(List<TodoTask> todoTask);
 
+        List<TodoTask> Done(List<int> numList);
+
         List<TodoTask> Delete(List<int> deleteList);
 
         List<TodoTask> ActiveList(List<int> noList = null);
