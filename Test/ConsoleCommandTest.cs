@@ -183,6 +183,7 @@ namespace Consoleクラスのテスト {
                 //  検証
                 expectedTasks[0] = new TodoTask("ttt1");
                 Assert.AreEqual(expectedTasks, actualTasks);
+                mockTodo.Verify(m => m.Update(It.IsAny<Dictionary<int,string>>()), Times.Once());
             }
 
             [Test]
@@ -194,6 +195,7 @@ namespace Consoleクラスのテスト {
                 expectedTasks[0] = new TodoTask("ttt1");
                 expectedTasks[1] = new TodoTask("ttt2");
                 Assert.AreEqual(expectedTasks, actualTasks);
+                mockTodo.Verify(m => m.Update(It.IsAny<Dictionary<int,string>>()), Times.Once());
             }
 
             [Test]
@@ -203,6 +205,7 @@ namespace Consoleクラスのテスト {
 
                 //  検証
                 Assert.IsTrue(result is ErrorCommandResult);
+                mockTodo.Verify(m => m.Update(It.IsAny<Dictionary<int,string>>()), Times.Never());
             }
         }
 
@@ -246,6 +249,7 @@ namespace Consoleクラスのテスト {
 
                 //  検証
                 Assert.AreEqual(expectedTasks, result.GetTodoCommandResult());
+                mockTodo.Verify(m => m.ActiveList(It.IsAny<List<int>>()), Times.Once());
             }
         }
     }
