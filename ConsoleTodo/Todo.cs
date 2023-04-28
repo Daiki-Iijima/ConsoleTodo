@@ -17,7 +17,7 @@ namespace ConsoleTodo {
             return tasks;
         }
 
-        public List<TodoTask> Delete(List<int> deleteList) {https://trello.com/b/SCO9iQOl/278%E3%81%BE%E3%81%A7%E3%81%AE%E3%82%BF%E3%82%B9%E3%82%AF
+        public List<TodoTask> Delete(List<int> deleteList) {
             tasks = tasks.Where((task, i) => !deleteList.Contains(i)).ToList();
             return tasks;
         }

@@ -38,5 +38,9 @@ namespace ConsoleTodo {
         public void Done() {
             IsCompleted = true;
         }
+
+        public override int GetHashCode() {
+            return 0;
+        }
     }
 }

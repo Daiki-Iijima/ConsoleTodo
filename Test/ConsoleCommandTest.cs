@@ -26,9 +26,11 @@ namespace Consoleクラスのテスト {
 
         public class 追加コマンド {
 
+#nullable disable
             private Mock<ITodo> mockTodo;
             private List<TodoTask> tasks;
             private CommandInvoker commandInvoker;
+#nullable enable
 
             [SetUp]
             public void SetUp() {
@@ -67,16 +69,18 @@ namespace Consoleクラスのテスト {
                     new TodoTask("test2")
                 };
 
-                Assert.AreEqual(expectedTasks, tasks);
+                CollectionAssert.AreEqual(expectedTasks, tasks);
                 mockTodo.Verify(m => m.Add(It.IsAny<List<TodoTask>>()), Times.Once());
             }
         }
 
         public class 削除コマンド {
 
+#nullable disable
             private Mock<ITodo> mockTodo;
             private List<TodoTask> tasks;
             private CommandInvoker commandInvoker;
+#nullable enable
 
             [SetUp]
             public void SetUp() {
@@ -113,7 +117,7 @@ namespace Consoleクラスのテスト {
                     new TodoTask("test2"),
                     new TodoTask("test3")
                 };
-                Assert.AreEqual(expectedTasks, tasks);
+                CollectionAssert.AreEqual(expectedTasks, tasks);
                 mockTodo.Verify(m => m.Delete(It.IsAny<List<int>>()), Times.Once());
             }
 
@@ -127,7 +131,7 @@ namespace Consoleクラスのテスト {
                     new TodoTask("test3")
                 };
 
-                Assert.AreEqual(expectedTasks, tasks);
+                CollectionAssert.AreEqual(expectedTasks, tasks);
                 mockTodo.Verify(m => m.Delete(It.IsAny<List<int>>()), Times.Once());
             }
 
@@ -145,10 +149,12 @@ namespace Consoleクラスのテスト {
 
         public class 更新コマンド {
 
+#nullable disable
             private CommandInvoker commandInvoker;
             private Mock<ITodo> mockTodo;
             private List<TodoTask> expectedTasks;
             private List<TodoTask> actualTasks;
+#nullable enable
 
             [SetUp]
             public void SetUp() {
@@ -182,7 +188,7 @@ namespace Consoleクラスのテスト {
 
                 //  検証
                 expectedTasks[0] = new TodoTask("ttt1");
-                Assert.AreEqual(expectedTasks, actualTasks);
+                CollectionAssert.AreEqual(expectedTasks, actualTasks);
                 mockTodo.Verify(m => m.Update(It.IsAny<Dictionary<int,string>>()), Times.Once());
             }
 
@@ -194,7 +200,7 @@ namespace Consoleクラスのテスト {
                 //  検証
                 expectedTasks[0] = new TodoTask("ttt1");
                 expectedTasks[1] = new TodoTask("ttt2");
-                Assert.AreEqual(expectedTasks, actualTasks);
+                CollectionAssert.AreEqual(expectedTasks, actualTasks);
                 mockTodo.Verify(m => m.Update(It.IsAny<Dictionary<int,string>>()), Times.Once());
             }
 
@@ -210,8 +216,10 @@ namespace Consoleクラスのテスト {
         }
 
         public class 表示コマンド {
+#nullable disable
             private CommandInvoker commandInvoker;
             private Mock<ITodo> mockTodo;
+#nullable enable
 
             private List<TodoTask> expectedTasks;
             private List<TodoTask> actualTasks;
@@ -248,7 +256,7 @@ namespace Consoleクラスのテスト {
                 ITodoCommandResult result = (ITodoCommandResult)commandInvoker.Invoke("list");
 
                 //  検証
-                Assert.AreEqual(expectedTasks, result.GetTodoCommandResult());
+                CollectionAssert.AreEqual(expectedTasks, result.GetTodoCommandResult());
                 mockTodo.Verify(m => m.ActiveList(It.IsAny<List<int>>()), Times.Once());
             }
         }
