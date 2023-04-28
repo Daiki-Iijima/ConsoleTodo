@@ -53,6 +53,7 @@
     <Compile Include="Command\BaseCommand.cs" />
     <Compile Include="Command\CommandInvoker.cs" />
     <Compile Include="Command\DoneCommand.cs" />
+    <Compile Include="Command\DoneListCommand.cs" />
     <Compile Include="Command\ICommand.cs" />
     <Compile Include="Command\DeleteCommand.cs" />
     <Compile Include="Command\Result\ErrorCommandResult.cs" />

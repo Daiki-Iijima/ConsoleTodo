@@ -6,16 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleTodo.Command {
-    public class DoneCommand : BaseCommand {
+    public class DoneListCommand : BaseCommand {
 
-        public DoneCommand(ITodo todo): base("done", todo) {
+        public DoneListCommand(ITodo todo) : base("donelist", todo) {
+
         }
-
         public override ICommandResult ExcuteFunc() {
-            if (arg.Count == 0) {
-                return new SuccesTodoCommandResult(todo.DoneList(), arg, "成功");
-            }
-
             //  文字列を数字に変換できるか
             if (!arg.All(str => int.TryParse(str, out int num))) {
                 return new ErrorCommandResult();
@@ -25,10 +21,9 @@ namespace ConsoleTodo.Command {
             List<int> nums = arg.Select(str => int.Parse(str)).ToList();
 
             //  処理実行
-            List<TodoTask> result = todo.Done(nums);
+            List<TodoTask> result = todo.DoneList(nums);
 
             return new SuccesTodoCommandResult(result, arg, "成功");
-
         }
     }
 }

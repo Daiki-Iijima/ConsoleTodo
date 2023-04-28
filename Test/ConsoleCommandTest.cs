@@ -355,5 +355,60 @@ namespace Consoleクラスのテスト {
                 mockTodo.Verify(m => m.ActiveList(It.IsAny<List<int>>()), Times.Once());
             }
         }
+
+        public class 終了タスク一覧コマンド {
+#nullable disable
+            private CommandInvoker commandInvoker;
+            private Mock<ITodo> mockTodo;
+#nullable enable
+
+            private List<TodoTask> expectedTasks;
+
+            [SetUp]
+            public void SetUp() {
+                //  準備
+                SetUpCommonLogic(out mockTodo, out expectedTasks, out commandInvoker);
+
+                commandInvoker.InvokeCommands.Add(new DoneListCommand(mockTodo.Object));
+
+                expectedTasks = new List<TodoTask>() {
+                    new TodoTask("test1"),
+                    new TodoTask("test2"),
+                    new TodoTask("test3"),
+                };
+
+                //  Addメソッドが実行された時の動作を記述
+                mockTodo.Setup(todo => todo.DoneList(It.IsAny<List<int>>())).
+                    Returns((List<int> numList) => {
+                        if (numList.Count == 0) {
+                            return expectedTasks;
+                        }
+
+                        List<TodoTask> retTasks = expectedTasks.Where((task, i) => numList.Contains(i)).ToList();
+                        return retTasks;
+                    });
+            }
+
+            [Test]
+            public void 入力が_donelist_の場合_終了タスク一覧が返される() {
+                //  実行
+                SuccesTodoCommandResult result = (SuccesTodoCommandResult)commandInvoker.Invoke("donelist");
+
+                //  検証
+                CollectionAssert.AreEqual(expectedTasks, result.GetTodoCommandResult());
+                mockTodo.Verify(m => m.DoneList(It.IsAny<List<int>>()), Times.Once());
+            }
+
+            [Test]
+            public void 入力が_donelist_0_の場合_終了タスクリストの0番目のタスクが返される() {
+                //  実行
+                SuccesTodoCommandResult result = (SuccesTodoCommandResult)commandInvoker.Invoke("donelist 0");
+
+                //  検証
+                CollectionAssert.AreEqual(new List<TodoTask>() { new TodoTask("test1") }, result.GetTodoCommandResult());
+                mockTodo.Verify(m => m.DoneList(It.IsAny<List<int>>()), Times.Once());
+            }
+
+        }
     }
 }
