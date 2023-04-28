@@ -11,7 +11,22 @@ namespace ConsoleTodo.Command {
         }
 
         public override ICommandResult ExcuteFunc() {
-            return new SuccesTodoCommandResult(todo.ActiveList(),arg,"成功");
+            if(arg.Count == 0) {
+                return new SuccesTodoCommandResult(todo.ActiveList(), arg, "成功");
+            }
+
+            //  文字列を数字に変換できるか
+            if (!arg.All(str => int.TryParse(str, out int num))) {
+                return new ErrorCommandResult();
+            }
+
+            //  変換
+            List<int> nums = arg.Select(str => int.Parse(str)).ToList();
+
+            //  処理実行
+            List<TodoTask> result = todo.ActiveList(nums);
+
+            return new SuccesTodoCommandResult(result, arg, "成功");
         }
     }
 }
