@@ -14,12 +14,12 @@ namespace ConsoleTodo.Command {
 
         public override ICommandResult ExcuteFunc() {
             if (arg.Count % 2 != 0) {
-                return new ErrorCommandResult();
+                return new ErrorCommandResult(WakeWord);
             }
 
             //  処理できない情報が入っている場合
             if (arg.All(value => string.IsNullOrEmpty(value))) {
-                return new ErrorCommandResult();
+                return new ErrorCommandResult(WakeWord);
             }
 
             int targetNum = 0;
@@ -36,7 +36,7 @@ namespace ConsoleTodo.Command {
 
             var tasks = todo.Update(updateTaskPair);
 
-            return new SuccesTodoCommandResult(tasks, arg, "成功");
+            return new SuccesTodoCommandResult(WakeWord,tasks, arg, "成功");
         }
     }
 }

@@ -24,10 +24,10 @@ namespace ConsoleTodo.Command {
 
             if (nums == null) {
 
-                return new ErrorCommandResult();
+                return new ErrorCommandResult(WakeWord);
             }
 
-            return new SuccesTodoCommandResult(todo.Delete(nums), arg, "成功");
+            return new SuccesTodoCommandResult(WakeWord, todo.Delete(nums), arg, "成功");
 
         }
     }

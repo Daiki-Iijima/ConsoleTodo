@@ -22,10 +22,10 @@ namespace ConsoleTodo.Command {
                     tasks.Add(new TodoTask(taskName));
                 }
                 tasks = todo.Add(tasks);
-                return new SuccesTodoCommandResult(tasks, arg, "成功");
+                return new SuccesTodoCommandResult(WakeWord, tasks, arg, "成功");
             }
 
-            return new ErrorCommandResult("追加コマンドエラー");
+            return new ErrorCommandResult(WakeWord,"追加コマンドエラー");
         }
     }
 }

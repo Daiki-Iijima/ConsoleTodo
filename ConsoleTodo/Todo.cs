@@ -28,7 +28,7 @@ namespace ConsoleTodo {
                     tasks[i].Done();
                 }
             }
-            return new List<TodoTask>(tasks.Where(task => !task.IsCompleted));
+            return new List<TodoTask>(tasks.Where(task => task.IsCompleted));
         }
 
         public List<TodoTask> DoneList(List<int> num = null) {
@@ -75,6 +75,10 @@ namespace ConsoleTodo {
             }
 
             return retTasks;
+        }
+
+        public List<TodoTask> GetAllTasks() {
+            return tasks;
         }
     }
 }

@@ -37,7 +37,7 @@ namespace ConsoleTodo.Command {
                  return ExcuteFunc();
             }
 
-            return new ErrorCommandResult();
+            return new ErrorCommandResult(WakeWord);
         }
 
         private List<string> SplitCommnad(string commandStr) {

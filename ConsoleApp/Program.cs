@@ -52,8 +52,8 @@ while (isLoop) {
     //  成功していたら保存
     if(result is SuccesTodoCommandResult succesResult) {
         List<TodoTask> resultTasks = succesResult.GetTodoCommandResult();
-        fileIO.Save(resultTasks);
         OutPutTaskList(resultTasks);
+        fileIO.Save(todo.GetAllTasks());
     }
 
     //  失敗の場合

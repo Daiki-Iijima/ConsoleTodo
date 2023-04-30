@@ -54,8 +54,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
                 List<TodoTask> doneList = todo.Done(new List<int> { 0 });
 
                 List<TodoTask> expected = new List<TodoTask> {
-                    new TodoTask("Test2"),
-                    new TodoTask("Test3")
+                    new TodoTask("Test1"),
                 };
 
                 Assert.AreEqual(expected,doneList);
@@ -67,7 +66,8 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
                 List<TodoTask> doneList = todo.Done(new List<int> { 0, 1 });
 
                 List<TodoTask> expected = new List<TodoTask> {
-                    new TodoTask("Test3")
+                    new TodoTask("Test1"),
+                    new TodoTask("Test2")
                 };
 
                 Assert.AreEqual(expected,doneList);
@@ -256,5 +256,23 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
                 Assert.AreEqual(tasks, deleteResultTasks);
             }
         }
+        class 全タスク取得 {
+            [Test]
+            public void 完了_未完了タスクを結合してすべてのタスクを返す() {
+                Todo todo = new Todo();
+                todo.Add(new List<TodoTask>() { new TodoTask("test1"), new TodoTask("test2"), new TodoTask("test3") });
+                todo.Done(new List<int> { 0 });
+
+                List<TodoTask> actualList = todo.GetAllTasks();
+
+                List<TodoTask> expectedList = new List<TodoTask>() {
+                    new TodoTask("test1"),
+                    new TodoTask("test2"),
+                    new TodoTask("test3")
+                };
+                CollectionAssert.AreEqual(expectedList, actualList);
+            }
+        }
+                
     }
 }

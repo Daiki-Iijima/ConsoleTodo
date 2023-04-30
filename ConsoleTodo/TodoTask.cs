@@ -11,10 +11,16 @@ namespace ConsoleTodo {
         [JsonProperty("taskName")]
         private string taskName;
 
+        [JsonProperty("IsCompleted")]
         public bool IsCompleted { get; private set; }
 
         public TodoTask(string taskName) {
             this.taskName = taskName;
+        }
+        [JsonConstructor]
+        public TodoTask(string taskName,bool isCompleted) {
+            this.taskName = taskName;
+            this.IsCompleted = isCompleted;
         }
 
         public void Update(TodoTask task) {

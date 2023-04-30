@@ -14,7 +14,7 @@ namespace ConsoleTodo.Command {
         public override ICommandResult ExcuteFunc() {
             //  文字列を数字に変換できるか
             if (!arg.All(str => int.TryParse(str, out int num))) {
-                return new ErrorCommandResult();
+                return new ErrorCommandResult(WakeWord);
             }
 
             //  変換
@@ -23,7 +23,7 @@ namespace ConsoleTodo.Command {
             //  処理実行
             List<TodoTask> result = todo.DoneList(nums);
 
-            return new SuccesTodoCommandResult(result, arg, "成功");
+            return new SuccesTodoCommandResult(WakeWord, result, arg, "成功");
         }
     }
 }

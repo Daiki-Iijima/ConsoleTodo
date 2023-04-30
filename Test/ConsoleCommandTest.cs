@@ -72,6 +72,14 @@ namespace Consoleクラスのテスト {
                 CollectionAssert.AreEqual(expectedTasks, tasks);
                 mockTodo.Verify(m => m.Add(It.IsAny<List<TodoTask>>()), Times.Once());
             }
+
+            [Test]
+            public void 入力が_add_test_の場合_実行されたコマンドがaddであると分かる結果が返ってくる() {
+                SuccesTodoCommandResult result = (SuccesTodoCommandResult)commandInvoker.Invoke("add test");
+
+                CollectionAssert.AreEqual("add", result.CommandName);
+                mockTodo.Verify(m => m.Add(It.IsAny<List<TodoTask>>()), Times.Once());
+            }
         }
 
         public class 終了コマンド {
@@ -156,6 +164,14 @@ namespace Consoleクラスのテスト {
                 CollectionAssert.AreEqual(new List<TodoTask>() { new TodoTask("test3") }, tasks);
                 mockTodo.Verify(m => m.Done(It.IsAny<List<int>>()), Times.Once());
             }
+
+            [Test]
+            public void 入力が_done_0_の場合_実行されたコマンドがdoneであると分かる結果が返ってくる() {
+                SuccesTodoCommandResult result = (SuccesTodoCommandResult)commandInvoker.Invoke("done 0");
+
+                CollectionAssert.AreEqual("done", result.CommandName);
+                mockTodo.Verify(m => m.Done(It.IsAny<List<int>>()), Times.Once());
+            }
         }
 
         public class 削除コマンド {
@@ -229,6 +245,14 @@ namespace Consoleクラスのテスト {
                 mockTodo.Verify(m => m.Delete(It.IsAny<List<int>>()), Times.Never());
             }
 
+            [Test]
+            public void 入力が_delete_0_の場合_実行されたコマンドが_delete_であると分かる結果が返ってくる() {
+                SuccesTodoCommandResult result = (SuccesTodoCommandResult)commandInvoker.Invoke("delete 0");
+
+                CollectionAssert.AreEqual("delete", result.CommandName);
+                mockTodo.Verify(m => m.Delete(It.IsAny<List<int>>()), Times.Once());
+            }
+
         }
 
         public class 更新コマンド {
@@ -297,6 +321,14 @@ namespace Consoleクラスのテスト {
                 Assert.IsTrue(result is ErrorCommandResult);
                 mockTodo.Verify(m => m.Update(It.IsAny<Dictionary<int, string>>()), Times.Never());
             }
+
+            [Test]
+            public void 入力が_update_0_ttt1_の場合_実行されたコマンドが_update_であると分かる結果が返ってくる() {
+                SuccesTodoCommandResult result = (SuccesTodoCommandResult)commandInvoker.Invoke("update 0 ttt1");
+
+                CollectionAssert.AreEqual("update", result.CommandName);
+                mockTodo.Verify(m => m.Update(It.IsAny<Dictionary<int, string>>()), Times.Once());
+            }
         }
 
         public class 表示コマンド {
@@ -354,6 +386,14 @@ namespace Consoleクラスのテスト {
                 CollectionAssert.AreEqual(new List<TodoTask>() { new TodoTask("test1") }, result.GetTodoCommandResult());
                 mockTodo.Verify(m => m.ActiveList(It.IsAny<List<int>>()), Times.Once());
             }
+
+            [Test]
+            public void 入力が_list_0_の場合_実行されたコマンドが_list_であると分かる結果が返ってくる() {
+                SuccesTodoCommandResult result = (SuccesTodoCommandResult)commandInvoker.Invoke("list 0");
+
+                CollectionAssert.AreEqual("list", result.CommandName);
+                mockTodo.Verify(m => m.ActiveList(It.IsAny<List<int>>()), Times.Once());
+            }
         }
 
         public class 終了タスク一覧コマンド {
@@ -406,6 +446,14 @@ namespace Consoleクラスのテスト {
 
                 //  検証
                 CollectionAssert.AreEqual(new List<TodoTask>() { new TodoTask("test1") }, result.GetTodoCommandResult());
+                mockTodo.Verify(m => m.DoneList(It.IsAny<List<int>>()), Times.Once());
+            }
+
+            [Test]
+            public void 入力が_donelist_0_の場合_実行されたコマンドが_donelist_であると分かる結果が返ってくる() {
+                SuccesTodoCommandResult result = (SuccesTodoCommandResult)commandInvoker.Invoke("donelist 0");
+
+                CollectionAssert.AreEqual("donelist", result.CommandName);
                 mockTodo.Verify(m => m.DoneList(It.IsAny<List<int>>()), Times.Once());
             }
 
