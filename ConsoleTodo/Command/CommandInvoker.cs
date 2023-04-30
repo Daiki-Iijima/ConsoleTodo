@@ -13,9 +13,7 @@ namespace ConsoleTodo.Command {
         public ICommandResult Invoke(string commandStr) {
             foreach (ICommand command in InvokeCommands) {
                 var commandResult = command.Execute(commandStr);
-                if (commandResult is SuccesTodoCommandResult) {
-                    return commandResult;
-                }
+                return commandResult;
             }
 
             return new ErrorCommandResult("未設定のエラー");

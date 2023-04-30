@@ -80,6 +80,15 @@ namespace Consoleクラスのテスト {
                 CollectionAssert.AreEqual("add", result.CommandName);
                 mockTodo.Verify(m => m.Add(It.IsAny<List<TodoTask>>()), Times.Once());
             }
+
+            [Test]
+            public void 入力が_add_space_の場合_エラーになる() {
+                ICommandResult result = commandInvoker.Invoke("add  ");
+
+                Assert.IsTrue(result is ErrorCommandResult);
+                mockTodo.Verify(m => m.Add(It.IsAny<List<TodoTask>>()), Times.Never());
+            }
+
         }
 
         public class 終了コマンド {

@@ -58,7 +58,7 @@ while (isLoop) {
 
     //  失敗の場合
     if (result is ErrorCommandResult) {
-        Console.WriteLine("コマンドが間違っています。");
+        Console.WriteLine(result.GetResultMessage());
     }
 }
 
