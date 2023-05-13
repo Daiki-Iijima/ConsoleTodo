@@ -38,5 +38,9 @@ namespace ConsoleTodo.Command {
 
             return new SuccesTodoCommandResult(WakeWord,tasks, arg, "成功");
         }
+
+        public override string GetHelp() {
+            return "更新 : update [taskno] [TaskName] ..";
+        }
     }
 }

@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ConsoleTodo.FileIO;
 using Newtonsoft.Json;
 
 namespace ConsoleTodo {
-    public class TaskFileIO {
+    public class TaskFileIO: IFileIO {
 
         private static readonly string DirectoryName = "TodoApp";
         private static readonly string FileName = "task.json";

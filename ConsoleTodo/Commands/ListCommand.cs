@@ -6,14 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ConsoleTodo.Command {
-    public class DoneCommand : BaseCommand {
-
-        public DoneCommand(ITodo todo): base("done", todo) {
+    public class ListCommand : BaseCommand {
+        public ListCommand(ITodo todo) : base("list", todo) {
         }
 
         public override ICommandResult ExcuteFunc() {
-            if (arg.Count == 0) {
-                return new SuccesTodoCommandResult(WakeWord, todo.DoneList(), arg, "成功");
+            if(arg.Count == 0) {
+                return new SuccesTodoCommandResult(WakeWord, todo.ActiveList(), arg, "成功");
             }
 
             //  文字列を数字に変換できるか
@@ -25,10 +24,13 @@ namespace ConsoleTodo.Command {
             List<int> nums = arg.Select(str => int.Parse(str)).ToList();
 
             //  処理実行
-            List<TodoTask> result = todo.Done(nums);
+            List<TodoTask> result = todo.ActiveList(nums);
 
             return new SuccesTodoCommandResult(WakeWord, result, arg, "成功");
+        }
 
+        public override string GetHelp() {
+            return "進行中一覧 : list";
         }
     }
 }

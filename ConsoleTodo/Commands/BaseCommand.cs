@@ -43,5 +43,11 @@ namespace ConsoleTodo.Command {
         private List<string> SplitCommnad(string commandStr) {
             return commandStr.Split(' ').ToList();
         }
+
+        /// <summary>
+        /// コマンドの使用方法や注意点を取得する
+        /// </summary>
+        /// <returns></returns>
+        public abstract string GetHelp();
     }
 }

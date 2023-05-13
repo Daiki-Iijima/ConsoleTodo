@@ -25,5 +25,9 @@ namespace ConsoleTodo.Command {
 
             return new SuccesTodoCommandResult(WakeWord, result, arg, "成功");
         }
+
+        public override string GetHelp() {
+            return "終了一覧 : donelist";
+        }
     }
 }

@@ -13,12 +13,13 @@ namespace ConsoleTodo.Command {
         public ICommandResult Invoke(string commandStr) {
             foreach (ICommand command in InvokeCommands) {
                 var commandResult = command.Execute(commandStr);
+                //  成功の場合はルーを終了
                 if (commandResult is SuccesTodoCommandResult) {
                     return commandResult;
                 }
             }
 
-            return new ErrorCommandResult("未設定のエラー");
+            return new ErrorCommandResult("コマンドが見つかりませんでした");
         }
     }
 }

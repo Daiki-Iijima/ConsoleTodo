@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleTodo.Command {
-    public interface ICommand {
-        ICommandResult Execute(string commandStr);
+namespace ConsoleTodo {
+    public interface ICommandHelpProvider {
+        string GetHelp();
     }
 }
