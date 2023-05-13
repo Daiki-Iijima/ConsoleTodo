@@ -2,18 +2,28 @@
 using ConsoleTodo;
 using ConsoleTodo.Command;
 using ConsoleTodo.Command.Result;
+using ConsoleTodo.FileIO;
 
 Todo todo = new Todo();
 
 bool isLoop = true;
 
-TaskFileIO fileIO = new TaskFileIO();
+IFileIO fileIO = new TaskFileIO();
 
 //  タスクを読み込んで追加しておく
 var tasks = fileIO.Load();
 if (tasks != null) {
     todo.Add(tasks);
 }
+
+//  コマンドの追加
+CommandInvoker commandInvoker = new CommandInvoker();
+commandInvoker.InvokeCommands.Add(new AddCommand(todo));
+commandInvoker.InvokeCommands.Add(new DoneCommand(todo));
+commandInvoker.InvokeCommands.Add(new DeleteCommand(todo));
+commandInvoker.InvokeCommands.Add(new UpdateCommand(todo));
+commandInvoker.InvokeCommands.Add(new ListCommand(todo));
+commandInvoker.InvokeCommands.Add(new DoneListCommand(todo));
 
 while (isLoop) {
 
@@ -23,31 +33,24 @@ while (isLoop) {
 
     if (input == null) {
         isLoop = false;
+        return;
     }
     if (input == "exit") {
         isLoop = false;
+        return;
     }
 
     if (input == "help") {
-        Console.WriteLine("追加 : add [TaskName] ..");
-        Console.WriteLine("終了 : done [TaskNo] ..");
-        Console.WriteLine("削除 : remove [TaskNo] ..");
-        Console.WriteLine("更新 : update [TaskNo] [TaskName] ...");
-        Console.WriteLine("進行中一覧 : list");
-        Console.WriteLine("終了一覧 : donelist");
+        Console.WriteLine("===============================");
+        foreach (ICommandHelpProvider helpProvider in commandInvoker.InvokeCommands) {
+            Console.WriteLine(helpProvider.GetHelp());
+        }
+        Console.WriteLine("===============================");
+        continue;
     }
 
-    //  コマンドの追加
-    CommandInvoker command = new CommandInvoker();
-    command.InvokeCommands.Add(new AddCommand(todo));
-    command.InvokeCommands.Add(new DoneCommand(todo));
-    command.InvokeCommands.Add(new DeleteCommand(todo));
-    command.InvokeCommands.Add(new UpdateCommand(todo));
-    command.InvokeCommands.Add(new ListCommand(todo));
-    command.InvokeCommands.Add(new DoneListCommand(todo));
-
     //  実行
-    ICommandResult result = command.Invoke(input);
+    ICommandResult result = commandInvoker.Invoke(input);
 
     //  成功していたら保存
     if(result is SuccesTodoCommandResult succesResult) {

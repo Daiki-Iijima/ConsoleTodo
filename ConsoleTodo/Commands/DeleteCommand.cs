@@ -30,5 +30,9 @@ namespace ConsoleTodo.Command {
             return new SuccesTodoCommandResult(WakeWord, todo.Delete(nums), arg, "成功");
 
         }
+
+        public override string GetHelp() {
+            return "削除 : remove [taskno] ..";
+        }
     }
 }

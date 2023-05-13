@@ -1,4 +1,5 @@
 ﻿using ConsoleTodo;
+using ConsoleTodo.FileIO;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,7 +13,7 @@ namespace タスクデータ永続化機能_TaskFileIOクラス {
     public class TaskFileIOTest {
         public class タスクリストを渡すとファイル名_task_json_に保存される {
 
-            private TaskFileIO fileIO;
+            private IFileIO fileIO;
 
             private List<TodoTask> tasks;
 

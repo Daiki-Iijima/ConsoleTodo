@@ -89,6 +89,11 @@ namespace Consoleクラスのテスト {
                 mockTodo.Verify(m => m.Add(It.IsAny<List<TodoTask>>()), Times.Never());
             }
 
+            [Test]
+            public void addコマンドの使用方法が返される() {
+                ICommandHelpProvider helpProvider = new AddCommand(mockTodo.Object);
+                Assert.AreEqual("追加 : add [taskname] ..", helpProvider.GetHelp());
+            }
         }
 
         public class 終了コマンド {
@@ -181,6 +186,12 @@ namespace Consoleクラスのテスト {
                 CollectionAssert.AreEqual("done", result.CommandName);
                 mockTodo.Verify(m => m.Done(It.IsAny<List<int>>()), Times.Once());
             }
+
+            [Test]
+            public void doneコマンドの使用方法が返される() {
+                ICommandHelpProvider helpProvider = new DoneCommand(mockTodo.Object);
+                Assert.AreEqual("終了 : done [taskno] ..", helpProvider.GetHelp());
+            }
         }
 
         public class 削除コマンド {
@@ -262,6 +273,11 @@ namespace Consoleクラスのテスト {
                 mockTodo.Verify(m => m.Delete(It.IsAny<List<int>>()), Times.Once());
             }
 
+            [Test]
+            public void deleteコマンドの使用方法が返される() {
+                ICommandHelpProvider helpProvider = new DeleteCommand(mockTodo.Object);
+                Assert.AreEqual("削除 : remove [taskno] ..", helpProvider.GetHelp());
+            }
         }
 
         public class 更新コマンド {
@@ -338,6 +354,12 @@ namespace Consoleクラスのテスト {
                 CollectionAssert.AreEqual("update", result.CommandName);
                 mockTodo.Verify(m => m.Update(It.IsAny<Dictionary<int, string>>()), Times.Once());
             }
+
+            [Test]
+            public void updateコマンドの使用方法が返される() {
+                ICommandHelpProvider helpProvider = new UpdateCommand(mockTodo.Object);
+                Assert.AreEqual("更新 : update [taskno] [TaskName] ..", helpProvider.GetHelp());
+            }
         }
 
         public class 表示コマンド {
@@ -403,6 +425,12 @@ namespace Consoleクラスのテスト {
                 CollectionAssert.AreEqual("list", result.CommandName);
                 mockTodo.Verify(m => m.ActiveList(It.IsAny<List<int>>()), Times.Once());
             }
+
+            [Test]
+            public void listコマンドの使用方法が返される() {
+                ICommandHelpProvider helpProvider = new ListCommand(mockTodo.Object);
+                Assert.AreEqual("進行中一覧 : list", helpProvider.GetHelp());
+            }
         }
 
         public class 終了タスク一覧コマンド {
@@ -466,6 +494,12 @@ namespace Consoleクラスのテスト {
                 mockTodo.Verify(m => m.DoneList(It.IsAny<List<int>>()), Times.Once());
             }
 
+            [Test]
+            public void donelistコマンドの使用方法が返される() {
+                ICommandHelpProvider helpProvider = new DoneListCommand(mockTodo.Object);
+                Assert.AreEqual("終了一覧 : donelist", helpProvider.GetHelp());
+            }
         }
+
     }
 }

@@ -33,5 +33,9 @@ namespace ConsoleTodo.Command {
 
             return new ErrorCommandResult(WakeWord,"追加コマンドエラー");
         }
+
+        public override string GetHelp() {
+            return "追加 : add [taskname] ..";
+        }
     }
 }
