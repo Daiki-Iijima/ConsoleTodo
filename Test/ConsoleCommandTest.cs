@@ -90,6 +90,14 @@ namespace Consoleクラスのテスト {
             }
 
             [Test]
+            public void 入力が_add_の場合_引数不足エラーが返ってくる() {
+                ICommandResult result = commandInvoker.Invoke("add");
+
+                Assert.IsTrue(result is ErrorCommandResult);
+                mockTodo.Verify(m => m.Add(It.IsAny<List<TodoTask>>()), Times.Never());
+            }
+
+            [Test]
             public void addコマンドの使用方法が返される() {
                 ICommandHelpProvider helpProvider = new AddCommand(mockTodo.Object);
                 Assert.AreEqual("追加 : add [taskname] ..", helpProvider.GetHelp());
