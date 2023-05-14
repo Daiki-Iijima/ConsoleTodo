@@ -32,7 +32,7 @@ namespace ConsoleTodo.Command {
         }
 
         public override string GetHelp() {
-            return "削除 : remove [taskno] ..";
+            return "削除 : delete [taskno] ..";
         }
     }
 }
