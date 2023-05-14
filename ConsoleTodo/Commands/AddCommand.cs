@@ -16,6 +16,12 @@ namespace ConsoleTodo.Command {
         /// 引数を主にチェック
         /// </summary>
         public override ICommandResult ExcuteFunc() {
+
+            //  引数がない場合
+            if (arg.Count == 0) {
+                return new ErrorCommandResult(WakeWord,"コマンド引数が必要です");
+            }
+
             if (arg[0] != null) {
                 List<TodoTask> tasks = new List<TodoTask>();
 
