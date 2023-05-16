@@ -2,6 +2,7 @@
 using ConsoleTodo;
 using ConsoleTodo.Command;
 using ConsoleTodo.Command.Result;
+using ConsoleTodo.Display;
 using ConsoleTodo.FileIO;
 
 Todo todo = new Todo();
@@ -9,6 +10,8 @@ Todo todo = new Todo();
 bool isLoop = true;
 
 IFileIO fileIO = new TaskFileIO();
+
+IDisplay display = new ConsoleDisplay();
 
 //  タスクを読み込んで追加しておく
 var tasks = fileIO.Load();
@@ -55,21 +58,13 @@ while (isLoop) {
     //  成功していたら保存
     if(result is SuccesTodoCommandResult succesResult) {
         List<TodoTask> resultTasks = succesResult.GetTodoCommandResult();
-        OutPutTaskList(resultTasks);
+        display.PrintTasks(resultTasks);
         fileIO.Save(todo.GetAllTasks());
     }
 
     //  失敗の場合
     if (result is ErrorCommandResult) {
-        Console.WriteLine(result.GetResultMessage());
-    }
-}
-
-void OutPutTaskList(List<TodoTask> tasks) {
-    int No = 0;
-    foreach (TodoTask task in tasks) {
-        Console.WriteLine(No + ":" + task.ToString());
-        No++;
+        display.PrintError(result);
     }
 }
 

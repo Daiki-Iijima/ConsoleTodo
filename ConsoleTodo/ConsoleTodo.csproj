@@ -63,6 +63,8 @@
     <Compile Include="Commands\UpdateCommand.cs" />
     <Compile Include="Commands\Result\ICommandResult.cs" />
     <Compile Include="Commands\ICommandHelpProvider.cs" />
+    <Compile Include="Display\ConsoleDisplay.cs" />
+    <Compile Include="Display\IDisplay.cs" />
     <Compile Include="FileIO\IFileIO.cs" />
     <Compile Include="TodoTasks\ITodo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
