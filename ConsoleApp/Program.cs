@@ -59,7 +59,7 @@ while (isLoop) {
     if(result is SuccesTodoCommandResult succesResult) {
         List<TodoTask> resultTasks = succesResult.GetTodoCommandResult();
         display.PrintTasks(resultTasks);
-        fileIO.Save(todo.GetAllTasks());
+        fileIO.Save(todo.GetAllList());
     }
 
     //  失敗の場合

@@ -77,7 +77,7 @@ namespace ConsoleTodo {
             return retTasks;
         }
 
-        public List<TodoTask> GetAllTasks() {
+        public List<TodoTask> GetAllList() {
             return tasks;
         }
     }
