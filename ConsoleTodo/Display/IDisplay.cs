@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace ConsoleTodo.Display {
     public interface IDisplay {
-        void PrintTasks(List<TodoTask> tasks);
+        void PrintTasks(List<TodoTask> tasks,bool showDone);
         void PrintError(ICommandResult result);
+        void PrintProgress(float progress);
     }
 }

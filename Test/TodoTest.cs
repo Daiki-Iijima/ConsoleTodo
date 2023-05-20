@@ -263,7 +263,7 @@ namespace Todoオブジェクトを操作する_CRUDクラス {
                 todo.Add(new List<TodoTask>() { new TodoTask("test1"), new TodoTask("test2"), new TodoTask("test3") });
                 todo.Done(new List<int> { 0 });
 
-                List<TodoTask> actualList = todo.GetAllTasks();
+                List<TodoTask> actualList = todo.GetAllList();
 
                 List<TodoTask> expectedList = new List<TodoTask>() {
                     new TodoTask("test1"),

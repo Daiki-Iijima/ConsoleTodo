@@ -16,5 +16,7 @@ namespace ConsoleTodo {
         List<TodoTask> DoneList(List<int> noList = null);
 
         List<TodoTask> Update(Dictionary<int, string> targetDic);
+
+        List<TodoTask> GetAllList();
     }
 }

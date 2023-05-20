@@ -1,6 +1,7 @@
 ﻿using ConsoleTodo;
 using ConsoleTodo.Command;
 using ConsoleTodo.Command.Result;
+using ConsoleTodo.Commands;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -284,7 +285,7 @@ namespace Consoleクラスのテスト {
             [Test]
             public void deleteコマンドの使用方法が返される() {
                 ICommandHelpProvider helpProvider = new DeleteCommand(mockTodo.Object);
-                Assert.AreEqual("削除 : remove [taskno] ..", helpProvider.GetHelp());
+                Assert.AreEqual("削除 : delete [taskno] ..", helpProvider.GetHelp());
             }
         }
 
@@ -506,6 +507,67 @@ namespace Consoleクラスのテスト {
             public void donelistコマンドの使用方法が返される() {
                 ICommandHelpProvider helpProvider = new DoneListCommand(mockTodo.Object);
                 Assert.AreEqual("終了一覧 : donelist", helpProvider.GetHelp());
+            }
+        }
+
+        public class 進捗コマンド {
+#nullable disable
+            private CommandInvoker commandInvoker;
+            private Mock<ITodo> mockTodo;
+#nullable enable
+
+            private List<TodoTask> tasks = new List<TodoTask>();
+
+            [SetUp]
+            public void SetUp() {
+                //  準備
+                SetUpCommonLogic(out mockTodo, out tasks, out commandInvoker);
+
+                commandInvoker.InvokeCommands.Add(new ProgressCommand(mockTodo.Object));
+
+                mockTodo.Setup(todo => todo.GetAllList()).Returns(() => tasks);
+                mockTodo.Setup(todo => todo.DoneList(It.IsAny<List<int>>())).
+                    Returns((List<int> numList) => {
+                        if (numList == null) {
+                            return tasks.Where(task => task.IsCompleted).ToList();
+                        }
+
+                        List<TodoTask> retTasks = tasks.Where((task, i) => numList.Contains(i)).ToList();
+                        return retTasks;
+                    });
+            }
+
+            [Test]
+            public void 入力が_progress_の場合_タスクが完了4未完了1のタスクを累計した数5と未完了の割合80が返ってくる() {
+                tasks = new List<TodoTask>() {
+                    new TodoTask("test1"),
+                    new TodoTask("test2"),
+                    new TodoTask("test3"),
+                    new TodoTask("test4"),
+                    new TodoTask("test5"),
+                };
+
+                tasks[0].Done();
+                tasks[1].Done();
+                tasks[2].Done();
+                tasks[3].Done();
+
+                SuccesTodoCommandResult result = (SuccesTodoCommandResult)commandInvoker.Invoke("progress");
+                float taskProgress = float.Parse(result.GetResultMessage());
+                Assert.AreEqual(80, taskProgress);
+            }
+
+            [Test]
+            public void 入力が_progress_の場合_タスクが完了0未完了0の時は_100が返ってくる() {
+                SuccesTodoCommandResult result = (SuccesTodoCommandResult)commandInvoker.Invoke("progress");
+                float taskProgress = float.Parse(result.GetResultMessage());
+                Assert.AreEqual(100, taskProgress);
+            }
+
+            [Test]
+            public void progressコマンドの使用方法が返される() {
+                ICommandHelpProvider helpProvider = new ProgressCommand(mockTodo.Object);
+                Assert.AreEqual("進捗 : progress", helpProvider.GetHelp());
             }
         }
 

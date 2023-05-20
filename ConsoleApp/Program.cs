@@ -2,8 +2,10 @@
 using ConsoleTodo;
 using ConsoleTodo.Command;
 using ConsoleTodo.Command.Result;
+using ConsoleTodo.Commands;
 using ConsoleTodo.Display;
 using ConsoleTodo.FileIO;
+using System.Diagnostics;
 
 Todo todo = new Todo();
 
@@ -27,6 +29,7 @@ commandInvoker.InvokeCommands.Add(new DeleteCommand(todo));
 commandInvoker.InvokeCommands.Add(new UpdateCommand(todo));
 commandInvoker.InvokeCommands.Add(new ListCommand(todo));
 commandInvoker.InvokeCommands.Add(new DoneListCommand(todo));
+commandInvoker.InvokeCommands.Add(new ProgressCommand(todo));
 
 while (isLoop) {
 
@@ -57,9 +60,16 @@ while (isLoop) {
 
     //  成功していたら保存
     if(result is SuccesTodoCommandResult succesResult) {
+        bool showDone = false;
+        if(succesResult.CommandName == "progress") {
+            display.PrintProgress(float.Parse(succesResult.GetResultMessage()));
+            showDone = true;
+        }
+
         List<TodoTask> resultTasks = succesResult.GetTodoCommandResult();
-        display.PrintTasks(resultTasks);
-        fileIO.Save(todo.GetAllTasks());
+        display.PrintTasks(resultTasks,showDone);
+
+        fileIO.Save(todo.GetAllList());
     }
 
     //  失敗の場合
